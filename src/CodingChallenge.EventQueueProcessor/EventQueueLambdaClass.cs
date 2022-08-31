@@ -69,7 +69,8 @@ public class EventQueueLambdaClass
             try
             {
                 logger.LogInformation($"log debug {record.Body}");
-                await runner.HandleInlineJsonOptionAsync(record.Body);
+                //await runner.HandleInlineJsonOptionAsync(record.Body);
+                await Task.FromResult("");
 
             }
 

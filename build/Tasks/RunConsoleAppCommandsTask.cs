@@ -17,18 +17,18 @@ public sealed class RunConsoleAppCommandsTask : FrostingTask<BuildContext>
         var transactionFileFullPath = Path.Combine(context.Config.StandardFolders.RootFullPath, "transactions.json");
         var inlineJson = "'{\"Type\":\"Mint\",\"TokenId\":\"0xD000000000000000000000000000000000000000\",\"Address\":\"0x1000000000000000000000000000000000000000\"}'";
         RunConsoleApplicationCommand(context, $"--read-file {transactionFileFullPath}");
-        RunConsoleApplicationCommand(context, "--nft 0xA000000000000000000000000000000000000000");
-        RunConsoleApplicationCommand(context, "--nft 0xB000000000000000000000000000000000000000");
-        RunConsoleApplicationCommand(context, "--nft 0xC000000000000000000000000000000000000000");
-        RunConsoleApplicationCommand(context, "--nft 0xD000000000000000000000000000000000000000");
-        // TODO - bugfix - double quites from the json is not relayed to process via process.start command.
-        // Token will not be created but it is a good test to see how the application behaves.
-        // this command works when called directly from command line. see utils/samplecommands.sh
-        RunConsoleApplicationCommand(context, "--read-inline " + inlineJson);
-        RunConsoleApplicationCommand(context, "--nft 0xD000000000000000000000000000000000000000");
-        RunConsoleApplicationCommand(context, "--wallet 0x3000000000000000000000000000000000000000");
-        RunConsoleApplicationCommand(context, "--reset");
-        RunConsoleApplicationCommand(context, "--wallet 0x3000000000000000000000000000000000000000");
+        // RunConsoleApplicationCommand(context, "--nft 0xA000000000000000000000000000000000000000");
+        // RunConsoleApplicationCommand(context, "--nft 0xB000000000000000000000000000000000000000");
+        // RunConsoleApplicationCommand(context, "--nft 0xC000000000000000000000000000000000000000");
+        // RunConsoleApplicationCommand(context, "--nft 0xD000000000000000000000000000000000000000");
+        // // TODO - bugfix - double quites from the json is not relayed to process via process.start command.
+        // // Token will not be created but it is a good test to see how the application behaves.
+        // // this command works when called directly from command line. see utils/samplecommands.sh
+        // RunConsoleApplicationCommand(context, "--read-inline " + inlineJson);
+        // RunConsoleApplicationCommand(context, "--nft 0xD000000000000000000000000000000000000000");
+        // RunConsoleApplicationCommand(context, "--wallet 0x3000000000000000000000000000000000000000");
+        // RunConsoleApplicationCommand(context, "--reset");
+        // RunConsoleApplicationCommand(context, "--wallet 0x3000000000000000000000000000000000000000");
     }
 
     private void RunConsoleApplicationCommand(BuildContext context, string consoleAppArguments)

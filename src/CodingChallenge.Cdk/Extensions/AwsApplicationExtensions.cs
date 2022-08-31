@@ -33,7 +33,6 @@ public static class AwsApplicationExtensions
         }
         var props = new QueueProps()
         {
-            Fifo = isFifo,
             QueueName = resourceName,
             RetentionPeriod = Duration.Days(10),
             //VisibilityTimeout = Duration.Seconds(0),
@@ -43,6 +42,8 @@ public static class AwsApplicationExtensions
         if (isFifo)
         {
             props.ContentBasedDeduplication = true;
+            props.Fifo = isFifo;
+
         }
         var resource = new Queue(stack, resourceName, props);
         return resource;
