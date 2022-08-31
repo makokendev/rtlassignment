@@ -6,7 +6,7 @@ using Amazon.CDK.AWS.IAM;
 using Amazon.CDK.AWS.SNS;
 using CodingChallenge.Infrastructure;
 using CodingChallenge.Infrastructure.Extensions;
-using CodingChallenge.Infrastructure.Persistence.NFTRecord;
+using CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 using Newtonsoft.Json;
 
 namespace CodingChallenge.Cdk.Stacks;
@@ -127,7 +127,7 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
                     S = "$method.request.querystring.walletid"
                 }
             },
-            TableName = awsApplication.GetDynamodbTableName(typeof(NFTRecordDataModel))
+            TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
         };
 
         return new AwsIntegration(new AwsIntegrationProps
@@ -174,10 +174,10 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
                     S = "$method.request.querystring.walletid"
                 }
             },
-            TableName = awsApplication.GetDynamodbTableName(typeof(NFTRecordDataModel))
+            TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
         };
         var queryRequestTemplate = new Dictionary<string, object>{
-            {"TableName",awsApplication.GetDynamodbTableName(typeof(NFTRecordDataModel))},
+            {"TableName",awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))},
             {"KeyConditionExpression","WalletId = :c"},
             {"ExpressionAttributeValues",new Dictionary<string,object>{
                 {":c",new Dictionary<string,object>{
@@ -230,10 +230,10 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
                     S = "$method.request.querystring.walletid"
                 }
             },
-            TableName = awsApplication.GetDynamodbTableName(typeof(NFTRecordDataModel))
+            TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
         };
         var scanRequestExample = new Dictionary<string, object>{
-            {"TableName",awsApplication.GetDynamodbTableName(typeof(NFTRecordDataModel))},
+            {"TableName",awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))},
             {"FilterExpression","TokenId = :c"},
             {"ExpressionAttributeValues",new Dictionary<string,object>{
                 {":c",new Dictionary<string,object>{

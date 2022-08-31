@@ -38,8 +38,8 @@ public class EventQueueLambdaClass
         services.AddSingleton<ILogger>(logger);
         services.AddSingleton<AWSAppProject>(awsApplication);
 
-        services.AddTransient<NFTRecordCommandController, NFTRecordCommandController>();
-        services.AddTransient<NFTRecordLambdaRunner, NFTRecordLambdaRunner>();
+        services.AddTransient<TVMazeScrapeCommandController, TVMazeScrapeCommandController>();
+        services.AddTransient<TVMazeLambdaRunner, TVMazeLambdaRunner>();
         serviceProvider = services.BuildServiceProvider();
     }
 
@@ -62,7 +62,7 @@ public class EventQueueLambdaClass
             logger.LogInformation($"No records are found");
             return;
         }
-        var runner = serviceProvider.GetService<NFTRecordLambdaRunner>();
+        var runner = serviceProvider.GetService<TVMazeLambdaRunner>();
 
         foreach (var record in sQSEvent.Records)
         {

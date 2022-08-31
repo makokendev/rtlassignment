@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CodingChallenge.Infrastructure.Persistence.NFTRecord;
+namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 
-public static class NFTRecordEntityDependencyInjection
+public static class TVMazeRecordEntityDependencyInjection
 {
     public static IServiceCollection AddNftEntityInfrastructure(this IServiceCollection services, IConfiguration configuration, ILogger logger)
     {
@@ -15,12 +15,12 @@ public static class NFTRecordEntityDependencyInjection
                 && configuration.GetValue<string>(Constants.DATABASE_TYPE_ENV_VAR_KEY).Equals(Constants.DATABASE_TYPE_DYNAMODB_ENV_VAR_KEY))
         {
             logger.LogDebug("Using Dynamodb repository");
-            services.AddScoped<INFTRecordRepository, NFTRecordDynamoDBRepository>();
+            services.AddScoped<ITVMazeRecordRepository, TVMazeRecordDynamoDBRepository>();
         }
         else
         {
             logger.LogDebug("Using SQL LITE repository");
-            services.AddScoped<INFTRecordRepository, NFTRecordRepository>();
+            services.AddScoped<ITVMazeRecordRepository, TVMazeRecordRepository>();
         }
         return services;
     }

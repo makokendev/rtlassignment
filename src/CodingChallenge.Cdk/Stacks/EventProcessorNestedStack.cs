@@ -23,7 +23,7 @@ public sealed class EventProcessorNestedStack : Amazon.CDK.NestedStack
     private QueueNestedStack SetupEventTransactionQueue(AWSAppProject awsApplication, ITopic eventTopic)
     {
         var blockChainEventQueueNameSuffix = "eventqueue";
-        var eventQueueStack = new QueueNestedStack(this, $"{blockChainEventQueueNameSuffix}-stack", new NestedStackProps(), awsApplication, blockChainEventQueueNameSuffix, isFifo: true, 10);
+        var eventQueueStack = new QueueNestedStack(this, $"{blockChainEventQueueNameSuffix}-stack", new NestedStackProps(), awsApplication, blockChainEventQueueNameSuffix, isFifo: false, 10);
         eventTopic.AddSubscription(new SqsSubscription(eventQueueStack.QueueObj, new SqsSubscriptionProps()
         {
             RawMessageDelivery = true,

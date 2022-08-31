@@ -5,12 +5,12 @@ using Xunit;
 
 namespace CodingChallenge.Application.IntegrationTests.NFT.Commands;
 
-public class MintCommandTests : CQRSTestBase
+public class ScrapeCommandTests : CQRSTestBase
 {
     [Fact]
     public async Task ShouldRequireMinimumFields()
     {
-        var command = new MintCommand(null,null);
+        var command = new ScrapeCommand(null,null);
         var exception = await Assert.ThrowsAsync<RequestValidationException>(async () => await Sender.Send(command));
         Assert.True(exception.Errors.Count > 0);
         Assert.NotNull(exception.Errors[nameof(command.TokenId)]);
@@ -19,7 +19,7 @@ public class MintCommandTests : CQRSTestBase
     [Fact]
     public async Task TokenidShouldBeValidHexadecimal()
     {
-        var command = new MintCommand("non-hex",null);
+        var command = new ScrapeCommand("non-hex",null);
         //assert
         var exception = await Assert.ThrowsAsync<RequestValidationException>(async () => await Sender.Send(command));
         Assert.True(exception.Errors.Count > 0);
@@ -29,7 +29,7 @@ public class MintCommandTests : CQRSTestBase
     public async Task WalletIdIsRequired()
     {
         var tokenId = GenerateBigIntegerHexadecimal();
-        var command = new MintCommand(tokenId,null);
+        var command = new ScrapeCommand(tokenId,null);
         //assert
         RequestValidationException exception = await Assert.ThrowsAsync<RequestValidationException>(async () => await Sender.Send(command));
         Assert.True(exception.Errors.Count > 0);
@@ -41,7 +41,7 @@ public class MintCommandTests : CQRSTestBase
     {
         var tokenId = GenerateBigIntegerHexadecimal();
         var walletId = GenerateBigIntegerHexadecimal();
-        var command = new MintCommand(tokenId,walletId);
+        var command = new ScrapeCommand(tokenId,walletId);
 
         var response = await Sender.Send(command);
         Assert.Equal(response.TokenId, tokenId);

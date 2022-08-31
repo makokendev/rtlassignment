@@ -9,11 +9,11 @@ public class ResetCommandTests : CQRSTestBase
     [Fact]
     public async Task ResetCommandShouldSucceed()
     {
-        var mintResponse = await SendMintCommandAsync();
+        var mintResponse = await SendScrapeCommandAsync();
         var postMintResponse = await GetNFTByIdQueryAsync(mintResponse.TokenId);
 
         var targetWalletId = GenerateBigIntegerHexadecimal();
-        var transferResponse = await TransferMintCommandAsync(mintResponse.TokenId, mintResponse.WalletId, targetWalletId);
+        var transferResponse = await TransferScrapeCommandAsync(mintResponse.TokenId, mintResponse.WalletId, targetWalletId);
         var getTokenResponseAfterTransfer = await GetNFTByIdQueryAsync(mintResponse.TokenId);
         var resetCommandResponse = await ResetCommandAsync();
         var postResetGetResponse = await GetNFTByIdQueryAsync(mintResponse.TokenId);

@@ -9,20 +9,20 @@ using System.Data;
 using CodingChallenge.Application.Exceptions;
 using CodingChallenge.Domain.Entities.NFT;
 
-namespace CodingChallenge.Infrastructure.Persistence.NFTRecord;
-public class NFTRecordRepository : INFTRecordRepository
+namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
+public class TVMazeRecordRepository : ITVMazeRecordRepository
 {
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
-    private readonly NFTRecordDataModelDbContext _context;
-    public NFTRecordRepository(IMapper mapper, ILogger logger, NFTRecordDataModelDbContext dbContext)
+    private readonly TVMazeRecordDataModelDbContext _context;
+    public TVMazeRecordRepository(IMapper mapper, ILogger logger, TVMazeRecordDataModelDbContext dbContext)
     {
         _mapper = mapper;
         this._logger = logger;
         _context = dbContext;
         _context.Database.EnsureCreated();
     }
-    public async Task MintAsync(NFTRecordEntity nFTEntity)
+    public async Task ScrapeAsync(TVMazeRecordEntity nFTEntity)
     {
         _logger.LogDebug($"Mint repo action is being executed... Token Id is {nFTEntity.TokenId}");
         var token = await _context.NftDataModel.FindAsync(nFTEntity.TokenId);
@@ -30,12 +30,12 @@ public class NFTRecordRepository : INFTRecordRepository
         {
             throw new NFTTokenAlreadyExistsException($"Token with id {nFTEntity.TokenId} already exists in the database");
         }
-        var dataModel = _mapper.Map<NFTRecordEntity, NFTRecordDataModel>(nFTEntity);
+        var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(nFTEntity);
         _context.Add(dataModel);
         await _context.SaveChangesAsync();
         _logger.LogDebug($"Mint repo action is successfully executed ... Token Id is {nFTEntity.TokenId}");
     }
-    public async Task BurnAsync(string tokenId)
+    public async Task AddScrapeTaskAsync(string tokenId)
     {
         _logger.LogDebug($"Burn repo action is being executed... Token Id is {tokenId}");
         var result = await _context.NftDataModel.FindAsync(tokenId);
@@ -44,20 +44,20 @@ public class NFTRecordRepository : INFTRecordRepository
         _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {tokenId}");
     }
 
-    public async Task<NFTRecordEntity> GetByTokenIdAsync(string tokenId)
+    public async Task<TVMazeRecordEntity> GetByTokenIdAsync(string tokenId)
     {
         _logger.LogDebug($"Get By Token repo action is being executed... Token Id is {tokenId}");
         var result = await _context.NftDataModel.FindAsync(tokenId);
-        var mappedEntity = _mapper.Map<NFTRecordDataModel, NFTRecordEntity>(result);
+        var mappedEntity = _mapper.Map<TVMazeRecordDataModel, TVMazeRecordEntity>(result);
         _logger.LogDebug($"Get By Token repo action is successfully executed for token with Id {tokenId}. Returning result");
         return mappedEntity;
     }
 
-    public async Task<List<NFTRecordEntity>> GetByWalletIdAsync(string walletId)
+    public async Task<List<TVMazeRecordEntity>> GetByWalletIdAsync(string walletId)
     {
         _logger.LogDebug($"Get tokens from wallet repo action is being executed... Wallet Id is {walletId}");
         var result = await _context.NftDataModel.Where(m => m.WalletId == walletId).ToListAsync();
-        var mappedEntity = _mapper.Map<List<NFTRecordDataModel>, List<NFTRecordEntity>>(result);
+        var mappedEntity = _mapper.Map<List<TVMazeRecordDataModel>, List<TVMazeRecordEntity>>(result);
         _logger.LogDebug($"Get tokens from wallet repo action is successfully executed for wallet with Id {walletId}. Returning result");
         return mappedEntity;
     }
@@ -70,10 +70,10 @@ public class NFTRecordRepository : INFTRecordRepository
         _logger.LogDebug($"Reset repo action is successfully executed");
     }
 
-    public async Task TransferAsync(NFTRecordEntity nFTEntity, string newWalletId)
+    public async Task TransferAsync(TVMazeRecordEntity nFTEntity, string newWalletId)
     {
         _logger.LogDebug($"Transfer repo action is being executed... Token Id is {nFTEntity.TokenId}");
-        var dataModel = _mapper.Map<NFTRecordEntity, NFTRecordDataModel>(nFTEntity);
+        var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(nFTEntity);
         var token = await _context.NftDataModel.FindAsync(nFTEntity.TokenId);
         if (token == null)
         {

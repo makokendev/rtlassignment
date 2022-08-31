@@ -13,14 +13,14 @@ public record ResetCommandResponse();
 
 public class ResetCommandHandler : IRequestHandler<ResetCommand, ResetCommandResponse>
 {
-    public ResetCommandHandler(INFTRecordRepository repo, ILogger logger, IMapper mapper)
+    public ResetCommandHandler(ITVMazeRecordRepository repo, ILogger logger, IMapper mapper)
     {
         _repo = repo;
         _logger = logger;
         _mapper = mapper;
     }
 
-    public INFTRecordRepository _repo { get; }
+    public ITVMazeRecordRepository _repo { get; }
     public readonly ILogger _logger;
 
     public readonly IMapper _mapper;

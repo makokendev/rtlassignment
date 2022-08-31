@@ -9,7 +9,7 @@ public class GetByTokenIdQueryTests : CQRSTestBase
     [Fact]
     public async Task GetNFTByIdQueryShouldSucceed()
     {
-        var mintResponse = await SendMintCommandAsync();
+        var mintResponse = await SendScrapeCommandAsync();
         var tokenResponse = await GetNFTByIdQueryAsync(mintResponse.TokenId);
 
         Assert.Equal(mintResponse.WalletId,tokenResponse.WalletId);

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CodingChallenge.Infrastructure.Persistence.NFTRecord;
-public class NFTRecordDataModelConfiguration : IEntityTypeConfiguration<NFTRecordDataModel>
+namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
+public class TVMazeRecordDataModelConfiguration : IEntityTypeConfiguration<TVMazeRecordDataModel>
 {
-    public void Configure(EntityTypeBuilder<NFTRecordDataModel> builder)
+    public void Configure(EntityTypeBuilder<TVMazeRecordDataModel> builder)
     {
         builder.HasKey(m => m.TokenId);
         builder.Property(t => t.TokenId)

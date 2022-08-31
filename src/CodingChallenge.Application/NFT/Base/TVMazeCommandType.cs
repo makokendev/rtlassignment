@@ -1,7 +1,7 @@
 namespace CodingChallenge.Application.NFT.Base;
-public enum NFTTransactionType
+public enum TVMazeCommandType
 {
-    Mint,
+    Scrap,
     Burn,
     Transfer
 }

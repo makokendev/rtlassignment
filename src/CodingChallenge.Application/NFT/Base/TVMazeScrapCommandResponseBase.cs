@@ -1,8 +1,8 @@
 namespace CodingChallenge.Application.NFT.Base;
-public abstract record NFTTransactionCommandResponseBase
+public abstract record TVMazeScrapeCommandResponseBase
 {
-    public NFTTransactionType TransactionType { get; }
-    public NFTTransactionCommandResponseBase(NFTTransactionType transactionType)
+    public TVMazeCommandType TransactionType { get; }
+    public TVMazeScrapeCommandResponseBase(TVMazeCommandType transactionType)
     {
         TransactionType = transactionType;
     }

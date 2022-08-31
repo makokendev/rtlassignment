@@ -2,9 +2,9 @@
 using CodingChallenge.Application.NFT.Base;
 namespace CodingChallenge.Application.NFT.Commands.Burn;
 
-public class BurnCommandValidator : AbstractValidator<BurnCommand>
+public class AddScrapeTaskCommandValidator : AbstractValidator<AddScrapeTaskCommand>
 {
-    public BurnCommandValidator()
+    public AddScrapeTaskCommandValidator()
     {
         RuleFor(v => v.TokenId)
            .NotEmpty()

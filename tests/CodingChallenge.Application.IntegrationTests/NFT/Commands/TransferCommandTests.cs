@@ -9,11 +9,11 @@ public class TransferCommandTests : CQRSTestBase
     public async Task TransferCommandShouldSucceed()
     {
 
-        var mintResponse = await SendMintCommandAsync();
+        var mintResponse = await SendScrapeCommandAsync();
         var postMintResponse = await GetNFTByIdQueryAsync(mintResponse.TokenId);
 
         var targetWalletId = GenerateBigIntegerHexadecimal();
-        var transferResponse = await TransferMintCommandAsync(mintResponse.TokenId, mintResponse.WalletId, targetWalletId);
+        var transferResponse = await TransferScrapeCommandAsync(mintResponse.TokenId, mintResponse.WalletId, targetWalletId);
         var getTokenResponseAfterTransfer = await GetNFTByIdQueryAsync(mintResponse.TokenId);
 
         Assert.NotEqual(postMintResponse.WalletId, targetWalletId);

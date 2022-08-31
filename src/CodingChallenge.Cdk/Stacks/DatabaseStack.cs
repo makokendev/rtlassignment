@@ -3,7 +3,7 @@ using Amazon.CDK.AWS.DynamoDB;
 using CodingChallenge.Cdk.Extensions;
 using CodingChallenge.Infrastructure;
 using CodingChallenge.Infrastructure.Extensions;
-using CodingChallenge.Infrastructure.Persistence.NFTRecord;
+using CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 
 namespace CodingChallenge.Cdk.Stacks;
 
@@ -12,13 +12,13 @@ public sealed class DatabaseStack : Stack
     public const string arnSuffixValue = "arn";
     public DatabaseStack(Construct parent, string id, IStackProps props, AWSAppProject awsApplication) : base(parent, id, props)
     {
-        SetupTableForNFTRecord(awsApplication);
+        SetupTableForTVMazeRecord(awsApplication);
     }
 
-    public void SetupTableForNFTRecord(AWSAppProject awsApplication)
+    public void SetupTableForTVMazeRecord(AWSAppProject awsApplication)
     {
 
-        string dynamoDBTableFullName = awsApplication.GetDynamodbTableName(typeof(NFTRecordDataModel));
+        string dynamoDBTableFullName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel));
         var dynamoDbTableProps = new TableProps()
         {
             TableName = dynamoDBTableFullName
@@ -26,16 +26,16 @@ public sealed class DatabaseStack : Stack
         dynamoDbTableProps.PartitionKey = new Amazon.CDK.AWS.DynamoDB.Attribute()
         {
             Type = Amazon.CDK.AWS.DynamoDB.AttributeType.STRING,
-            Name = nameof(Infrastructure.Persistence.NFTRecord.NFTRecordDataModel.WalletId)
+            Name = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel.WalletId)
         };
 
         dynamoDbTableProps.SortKey = new Amazon.CDK.AWS.DynamoDB.Attribute()
         {
             Type = Amazon.CDK.AWS.DynamoDB.AttributeType.STRING,
-            Name = nameof(Infrastructure.Persistence.NFTRecord.NFTRecordDataModel.TokenId)
+            Name = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel.TokenId)
         };
         var table = new Table(this, dynamoDBTableFullName, dynamoDbTableProps);
-        awsApplication.SetCfOutput(this, $"{typeof(NFTRecordDataModel).Name.ToLower()}-{arnSuffixValue}", table.TableArn);
+        awsApplication.SetCfOutput(this, $"{typeof(TVMazeRecordDataModel).Name.ToLower()}-{arnSuffixValue}", table.TableArn);
     }
 }
 

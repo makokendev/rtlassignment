@@ -4,14 +4,14 @@ using Newtonsoft.Json.Linq;
 
 namespace CodingChallenge.EventQueueProcessor;
 
-public class NFTRecordLambdaRunner
+public class TVMazeLambdaRunner
 {
     ILogger _logger;
-    NFTRecordCommandController _nftRecordCommandHandler;
-    public NFTRecordLambdaRunner(ILogger logger, NFTRecordCommandController handler)
+    TVMazeScrapeCommandController _TVMazeRecordCommandHandler;
+    public TVMazeLambdaRunner(ILogger logger, TVMazeScrapeCommandController handler)
     {
         _logger = logger;
-        _nftRecordCommandHandler = handler;
+        _TVMazeRecordCommandHandler = handler;
     }
 
 
@@ -19,7 +19,7 @@ public class NFTRecordLambdaRunner
     {
         _logger.LogDebug($"HandleGetWalletDataOption.HandleInlineJsonOption is being processed... {inlineJson}");
         var token = JToken.Parse(inlineJson);
-        List<NFTTransactionCommandBase> listOfCommands = new List<NFTTransactionCommandBase>();
+        List<TVMazeScrapeCommandBase> listOfCommands = new List<TVMazeScrapeCommandBase>();
         if (token is JArray)
         {
             listOfCommands.AddRange(inlineJson.ParseListOfTransactionCommands(_logger));
@@ -31,7 +31,7 @@ public class NFTRecordLambdaRunner
         if (listOfCommands.Any())
         {
             _logger.LogInformation($"There are {listOfCommands.Count} transaction(s). Processing command list");
-            var listOfCommandResponses = await _nftRecordCommandHandler.ProcessCommandListAsync(listOfCommands);
+            var listOfCommandResponses = await _TVMazeRecordCommandHandler.ProcessCommandListAsync(listOfCommands);
             _logger.LogInformation($"Read {listOfCommands.Count} transaction(s)");
             foreach (var response in listOfCommandResponses)
             {

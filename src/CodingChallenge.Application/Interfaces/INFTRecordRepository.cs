@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using CodingChallenge.Domain.Entities.NFT;
 
 namespace CodingChallenge.Application.Interfaces;
-public interface INFTRecordRepository
+public interface ITVMazeRecordRepository
 {
-    Task<List<NFTRecordEntity>> GetByWalletIdAsync(string walletId);
-    Task<NFTRecordEntity> GetByTokenIdAsync(string tokenId);
-    Task BurnAsync(string id);
-    Task MintAsync(NFTRecordEntity nFTEntity);
-    Task TransferAsync(NFTRecordEntity nFTEntity, string newWalletId);
+    Task<List<TVMazeRecordEntity>> GetByWalletIdAsync(string walletId);
+    Task<TVMazeRecordEntity> GetByTokenIdAsync(string tokenId);
+    Task AddScrapeTaskAsync(string id);
+    Task ScrapeAsync(TVMazeRecordEntity nFTEntity);
+    Task TransferAsync(TVMazeRecordEntity nFTEntity, string newWalletId);
     Task ResetAsync();
 }

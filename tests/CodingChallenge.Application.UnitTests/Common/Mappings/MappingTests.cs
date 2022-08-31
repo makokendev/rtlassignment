@@ -22,7 +22,7 @@ public class MappingTests
     }
 
     [Theory]
-    [InlineData(typeof(MintCommand), typeof(NFTRecordEntity))]
+    [InlineData(typeof(ScrapeCommand), typeof(TVMazeRecordEntity))]
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
     {
         var instance = GetInstanceOf(source);

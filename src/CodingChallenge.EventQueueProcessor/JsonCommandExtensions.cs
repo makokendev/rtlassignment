@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace CodingChallenge.EventQueueProcessor;
 public static class JsonCommandExtensions
 {
-    public static NFTTransactionCommandBase GetTransactionCommandFromJsonString(this string itemJsonText, ILogger logger)
+    public static TVMazeScrapeCommandBase GetTransactionCommandFromJsonString(this string itemJsonText, ILogger logger)
     {
         dynamic dynamicObject = JsonConvert.DeserializeObject(itemJsonText);
         var transactionType = dynamicObject?.Type?.ToString();
@@ -21,18 +21,18 @@ public static class JsonCommandExtensions
             var ex = new Exception("Type property is missing from the command object");
             logger.LogError(ex, ex.Message);
         }
-        var tryParseResult = Enum.TryParse(transactionType, true, out NFTTransactionType transactionTypeResult);
+        var tryParseResult = Enum.TryParse(transactionType, true, out TVMazeCommandType transactionTypeResult);
         switch (transactionTypeResult)
         {
-            case NFTTransactionType.Mint:
+            case TVMazeCommandType.Scrap:
                 {
-                    return JsonConvert.DeserializeObject<MintCommand>(itemJsonText);
+                    return JsonConvert.DeserializeObject<ScrapeCommand>(itemJsonText);
                 }
-            case NFTTransactionType.Burn:
+            case TVMazeCommandType.Burn:
                 {
-                    return JsonConvert.DeserializeObject<BurnCommand>(itemJsonText);
+                    return JsonConvert.DeserializeObject<AddScrapeTaskCommand>(itemJsonText);
                 }
-            case NFTTransactionType.Transfer:
+            case TVMazeCommandType.Transfer:
                 {
                     return JsonConvert.DeserializeObject<TransferCommand>(itemJsonText);
                 }
@@ -41,7 +41,7 @@ public static class JsonCommandExtensions
         }
         return null;
     }
-    public static List<NFTTransactionCommandBase> ParseJsonFile(this string filePath, ILogger logger)
+    public static List<TVMazeScrapeCommandBase> ParseJsonFile(this string filePath, ILogger logger)
     {
         if (!File.Exists(filePath))
         {
@@ -54,17 +54,17 @@ public static class JsonCommandExtensions
         return jsonText.ParseListOfTransactionCommands(logger);
     }
 
-    public static List<NFTTransactionCommandBase> ParseListOfTransactionCommands(this string jsonText, ILogger logger)
+    public static List<TVMazeScrapeCommandBase> ParseListOfTransactionCommands(this string jsonText, ILogger logger)
     {
         dynamic deserializedList = JsonConvert.DeserializeObject(jsonText);
         var transactionList = ParseListOfCommands(deserializedList, logger);
         return transactionList;
     }
 
-    public static List<NFTTransactionCommandBase> ParseListOfCommands(dynamic deserializedList, ILogger logger)
+    public static List<TVMazeScrapeCommandBase> ParseListOfCommands(dynamic deserializedList, ILogger logger)
     {
         logger.LogDebug($"deserialised list is being parsed...");
-        var transactionList = new List<NFTTransactionCommandBase>();
+        var transactionList = new List<TVMazeScrapeCommandBase>();
         foreach (var listItem in deserializedList)
         {
             var commandJson = listItem?.ToString() as string;

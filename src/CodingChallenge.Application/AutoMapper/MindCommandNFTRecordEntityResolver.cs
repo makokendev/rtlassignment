@@ -4,7 +4,7 @@ using CodingChallenge.Domain.Entities.NFT;
 
 namespace CodingChallenge.Application.AutoMapper;
 
-public class MindCommandNFTRecordEntityResolver : IValueResolver<MintCommand, NFTRecordEntity, NFTWallet>
+public class MindCommandTVMazeRecordEntityResolver : IValueResolver<ScrapeCommand, TVMazeRecordEntity, NFTWallet>
 {
-    public NFTWallet Resolve(MintCommand source, NFTRecordEntity destination, NFTWallet member, ResolutionContext context) => new NFTWallet(source.Address);
+    public NFTWallet Resolve(ScrapeCommand source, TVMazeRecordEntity destination, NFTWallet member, ResolutionContext context) => new NFTWallet(source.Address);
 }

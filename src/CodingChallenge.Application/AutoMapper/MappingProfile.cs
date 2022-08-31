@@ -9,21 +9,21 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         typeof(MappingProfile).Assembly.ApplyMappingsFromAssembly(this);
-        MapMintCommand();
+        MapScrapeCommand();
         MapTransferCommand();
     }
 
-    private void MapMintCommand()
+    private void MapScrapeCommand()
     {
-        CreateMap<MintCommand, NFTRecordEntity>()
+        CreateMap<ScrapeCommand, TVMazeRecordEntity>()
             .ForMember(dest => dest.TokenId, a => a.MapFrom(o => o.TokenId))
-            .ForMember(dest => dest.Wallet, a => a.MapFrom<MindCommandNFTRecordEntityResolver>());
+            .ForMember(dest => dest.Wallet, a => a.MapFrom<MindCommandTVMazeRecordEntityResolver>());
     }
     private void MapTransferCommand()
     {
-        CreateMap<TransferCommand, NFTRecordEntity>()
+        CreateMap<TransferCommand, TVMazeRecordEntity>()
             .ForMember(dest => dest.TokenId, a => a.MapFrom(o => o.TokenId))
-            .ForMember(dest => dest.Wallet, a => a.MapFrom<TransferCommandNFTRecordEntityResolver>());
+            .ForMember(dest => dest.Wallet, a => a.MapFrom<TransferCommandTVMazeRecordEntityResolver>());
     }
 
 

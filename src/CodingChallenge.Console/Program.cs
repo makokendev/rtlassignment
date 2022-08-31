@@ -19,7 +19,7 @@ partial class Program
         LoadConfiguration();
         SetupLogger();
         ConfigureServices(new ServiceCollection());
-        var commandParser = serviceProvider.GetService<NFTRecordConsoleRunner>();
+        var commandParser = serviceProvider.GetService<TVMazeConsoleRunner>();
         var parser = CommandLine.Parser.Default.ParseArguments<CommandLineOptions>(args);
         await parser.WithParsedAsync(async options => await commandParser.RunOptionsAsync(options));
         await parser.WithNotParsedAsync(async errs => await commandParser.HandleParseErrorAsync(errs));
@@ -35,8 +35,8 @@ partial class Program
         services.AddApplicationBaseDependencies();
         services.AddInfrastructureDependencies(configuration,logger);
         services.AddSingleton<ILogger>(logger);
-        services.AddTransient<NFTRecordCommandController, NFTRecordCommandController>();
-        services.AddTransient<NFTRecordConsoleRunner, NFTRecordConsoleRunner>();
+        services.AddTransient<TVMazeScrapeCommandController, TVMazeScrapeCommandController>();
+        services.AddTransient<TVMazeConsoleRunner, TVMazeConsoleRunner>();
         serviceProvider = services.BuildServiceProvider();
     }
 

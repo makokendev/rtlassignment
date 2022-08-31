@@ -8,22 +8,22 @@ using CodingChallenge.Domain.Entities.NFT;
 using MediatR;
 
 namespace CodingChallenge.Application.NFT.Queries.Wallet;
-public record GetNFTsFromWalletQuery(string WalletId) : IRequest<List<NFTRecordDto>>;
+public record GetNFTsFromWalletQuery(string WalletId) : IRequest<List<TVMazeRecordDto>>;
 
-public class GetNFTsFromWalletQueryHandler : IRequestHandler<GetNFTsFromWalletQuery, List<NFTRecordDto>>
+public class GetNFTsFromWalletQueryHandler : IRequestHandler<GetNFTsFromWalletQuery, List<TVMazeRecordDto>>
 {
-    private readonly INFTRecordRepository _repository;
+    private readonly ITVMazeRecordRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetNFTsFromWalletQueryHandler(INFTRecordRepository repository, IMapper mapper)
+    public GetNFTsFromWalletQueryHandler(ITVMazeRecordRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
 
-    public async Task<List<NFTRecordDto>> Handle(GetNFTsFromWalletQuery request, CancellationToken cancellationToken)
+    public async Task<List<TVMazeRecordDto>> Handle(GetNFTsFromWalletQuery request, CancellationToken cancellationToken)
     {
         var responseEntity = await _repository.GetByWalletIdAsync(request.WalletId);
-        return _mapper.Map<List<NFTRecordEntity>, List<NFTRecordDto>>(responseEntity);
+        return _mapper.Map<List<TVMazeRecordEntity>, List<TVMazeRecordDto>>(responseEntity);
     }
 }

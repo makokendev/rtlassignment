@@ -3,14 +3,14 @@ using Xunit;
 
 namespace CodingChallenge.Application.IntegrationTests.NFT.Commands;
 
-public class BurnCommandTests : CQRSTestBase
+public class AddScrapeTaskCommandTests : CQRSTestBase
 {
     [Fact]
-    public async Task BurnCommandShouldSucceed()
+    public async Task AddScrapeTaskCommandShouldSucceed()
     {
-        var mintResponse = await SendMintCommandAsync();
+        var mintResponse = await SendScrapeCommandAsync();
         var postMintResponse = await GetNFTByIdQueryAsync(mintResponse.TokenId);
-        var burnResponse = await BurnMintCommandAsync(mintResponse.TokenId);
+        var burnResponse = await BurnScrapeCommandAsync(mintResponse.TokenId);
         var tokenResponseAfterBurn = await GetNFTByIdQueryAsync(mintResponse.TokenId);
 
         Assert.Equal(mintResponse.WalletId, postMintResponse.WalletId);

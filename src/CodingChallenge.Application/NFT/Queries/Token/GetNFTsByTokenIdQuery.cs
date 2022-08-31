@@ -7,22 +7,22 @@ using MediatR;
 
 namespace CodingChallenge.Application.NFT.Queries.Token;
 
-public record GetNFTsByTokenIdQuery(string TokenId) : IRequest<NFTRecordDto>;
+public record GetNFTsByTokenIdQuery(string TokenId) : IRequest<TVMazeRecordDto>;
 
-public class GetNFTsByTokenIdQueryHandler : IRequestHandler<GetNFTsByTokenIdQuery, NFTRecordDto>
+public class GetNFTsByTokenIdQueryHandler : IRequestHandler<GetNFTsByTokenIdQuery, TVMazeRecordDto>
 {
-    private readonly INFTRecordRepository repo;
+    private readonly ITVMazeRecordRepository repo;
     private readonly IMapper _mapper;
 
-    public GetNFTsByTokenIdQueryHandler(INFTRecordRepository context, IMapper mapper)
+    public GetNFTsByTokenIdQueryHandler(ITVMazeRecordRepository context, IMapper mapper)
     {
         repo = context;
         _mapper = mapper;
     }
 
-    public async Task<NFTRecordDto> Handle(GetNFTsByTokenIdQuery request, CancellationToken cancellationToken)
+    public async Task<TVMazeRecordDto> Handle(GetNFTsByTokenIdQuery request, CancellationToken cancellationToken)
     {
         var responseEntity = await repo.GetByTokenIdAsync(request.TokenId);
-        return _mapper.Map<NFTRecordEntity, NFTRecordDto>(responseEntity);
+        return _mapper.Map<TVMazeRecordEntity, TVMazeRecordDto>(responseEntity);
     }
 }

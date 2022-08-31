@@ -12,7 +12,7 @@ public sealed class InfraStack : Stack
 {
     public const string EcrRepoSuffix = "processor-lambda";
     public const string eventTopicSuffix = "eventtopic";
-    // public const string dynamoDBTableSuffix = nameof(Infrastructure.Persistence.NFTRecord.NFTRecordDataModel);
+    // public const string dynamoDBTableSuffix = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel);
     public const string arnSuffixValue = "arn";
 
     public InfraStack(Construct parent, string id, IStackProps props, AWSAppProject awsApplication) : base(parent, id, props)
@@ -23,7 +23,7 @@ public sealed class InfraStack : Stack
     }
 
     //public static string GetDocBucketName(AwsAppProject awsApplication) => awsApplication.GetResourceName("docbucket");
-    public static string GetDocBucketName(AWSAppProject awsApplication) => $"awscdkdemo.{awsApplication.DomainName}";
+    public static string GetDocBucketName(AWSAppProject awsApplication) => $"rtlassignment.{awsApplication.DomainName}";
     private void SetupDocumentationS3Bucket(AWSAppProject awsApplication)
     {
         var bucketName = GetDocBucketName(awsApplication);
@@ -45,8 +45,8 @@ public sealed class InfraStack : Stack
         {
             TopicName = topicName,
             DisplayName = topicName,
-            Fifo = true,
-            ContentBasedDeduplication = true
+            Fifo = false,
+            //ContentBasedDeduplication = true
         });
         awsApplication.SetCfOutput(this, $"{eventTopicSuffix}-{arnSuffixValue}", eventTopic.TopicArn);
     }

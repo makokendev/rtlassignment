@@ -11,7 +11,7 @@ public class NFTEventProcessorTests : CQRSTestBase
     [Fact]
     public async Task HandleAsyncTest()
     {
-        var mintTransaction = new MintCommand(GenerateBigIntegerHexadecimal(),GenerateBigIntegerHexadecimal());
+        var mintTransaction = new ScrapeCommand(GenerateBigIntegerHexadecimal(),GenerateBigIntegerHexadecimal());
         var processor = new EventQueueLambdaClass();
         await processor.HandleAsync(new Amazon.Lambda.SQSEvents.SQSEvent()
         {

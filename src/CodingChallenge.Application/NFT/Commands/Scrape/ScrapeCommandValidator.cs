@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace CodingChallenge.Application.NFT.Commands.Mint;
 
-public class MintCommandValidator : AbstractValidator<MintCommand>
+public class ScrapeCommandValidator : AbstractValidator<ScrapeCommand>
 {
-    public MintCommandValidator()
+    public ScrapeCommandValidator()
     {
         RuleFor(v => v.TokenId)
             .NotEmpty()

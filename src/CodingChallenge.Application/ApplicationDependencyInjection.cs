@@ -19,9 +19,9 @@ public static class ApplicationDependencyInjection
         // }
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
-        //services.AddMediatR(Assembly.GetAssembly(typeof(MintCommand)));
+        //services.AddMediatR(Assembly.GetAssembly(typeof(ScrapeCommand)));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddValidatorsFromAssembly(Assembly.GetAssembly(typeof(MintCommand)));
+        services.AddValidatorsFromAssembly(Assembly.GetAssembly(typeof(ScrapeCommand)));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
         return services;

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using CodingChallenge.Infrastructure.Persistence.NFTRecord;
+using CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.IO;
@@ -16,7 +16,7 @@ public static class InfrastructureDependencyInjection
         if (configuration.GetValue<bool>("UseInMemoryDatabase"))
         {
             logger.LogDebug("opting for in memory database");
-            services.AddDbContext<NFTRecordDataModelDbContext>(options =>
+            services.AddDbContext<TVMazeRecordDataModelDbContext>(options =>
                 options.UseInMemoryDatabase("NFTDatabase"));
         }
         else
@@ -24,7 +24,7 @@ public static class InfrastructureDependencyInjection
             logger.LogDebug("opting for sq lite database");
             string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string dataSource = Path.Combine(assemblyFolder, "NFTDatabase.db");
-            services.AddDbContext<NFTRecordDataModelDbContext>(options =>
+            services.AddDbContext<TVMazeRecordDataModelDbContext>(options =>
                 options.UseSqlite($"Data Source={dataSource};", options =>
                     {
 

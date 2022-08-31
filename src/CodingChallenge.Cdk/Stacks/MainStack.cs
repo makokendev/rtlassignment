@@ -54,7 +54,7 @@ public sealed partial class MainStack : Stack
         {
             //Certificate = certificate,
             RegionalCertificateArn = awsApplication.CertificateArn,
-            DomainName = $"awscdkapi.{awsApplication.DomainName}",
+            DomainName = $"rtlapi.{awsApplication.DomainName}",
             EndpointConfiguration = new EndpointConfigurationProperty()
             {
                 Types = new string[] { "REGIONAL" }
