@@ -35,13 +35,13 @@ public class TVMazeRecordRepository : ITVMazeRecordRepository
         await _context.SaveChangesAsync();
         _logger.LogDebug($"Mint repo action is successfully executed ... Token Id is {nFTEntity.TokenId}");
     }
-    public async Task AddScrapeTaskAsync(string tokenId)
+    public async Task AddScrapeTaskAsync(string startIndex,string endIndex)
     {
-        _logger.LogDebug($"Burn repo action is being executed... Token Id is {tokenId}");
-        var result = await _context.NftDataModel.FindAsync(tokenId);
+        _logger.LogDebug($"Burn repo action is being executed... Token Id is {startIndex}");
+        var result = await _context.NftDataModel.FindAsync(startIndex);
         _context.NftDataModel.Remove(result);
         await _context.SaveChangesAsync();
-        _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {tokenId}");
+        _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {startIndex}");
     }
 
     public async Task<TVMazeRecordEntity> GetByTokenIdAsync(string tokenId)

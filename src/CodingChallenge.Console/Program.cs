@@ -13,6 +13,7 @@ partial class Program
     static IConfiguration configuration;
     static ILogger logger;
     static ServiceProvider serviceProvider;
+    public static AWSAppProject awsApplication;
 
     static async Task Main(string[] args)
     {
@@ -28,6 +29,8 @@ partial class Program
     {
         configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables().Build();
+        awsApplication = new AWSAppProject();
+        configuration.GetSection(Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX).Bind(awsApplication);
     }
 
     static void ConfigureServices(IServiceCollection services)
@@ -37,6 +40,7 @@ partial class Program
         services.AddSingleton<ILogger>(logger);
         services.AddTransient<TVMazeScrapeCommandController, TVMazeScrapeCommandController>();
         services.AddTransient<TVMazeConsoleRunner, TVMazeConsoleRunner>();
+        services.AddSingleton<AWSAppProject>(awsApplication);
         serviceProvider = services.BuildServiceProvider();
     }
 

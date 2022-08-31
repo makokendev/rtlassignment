@@ -36,7 +36,7 @@ public class TVMazeScrapeCommandController
     {
         if (command is ScrapeCommand)
         {
-            _logger.LogDebug($"command with token id {command.TokenId} is ScrapeCommand");
+            _logger.LogDebug($"command with token id is ScrapeCommand");
             return await ScrapeAsync(command as ScrapeCommand);
         }
         return null;
@@ -49,7 +49,7 @@ public class TVMazeScrapeCommandController
     }
     public async Task<AddScrapeTaskCommandResponse> BurnAsync(AddScrapeTaskCommand AddScrapeTaskCommand)
     {
-        _logger.LogDebug($"burn command is called for token id {AddScrapeTaskCommand.TokenId}");
+        _logger.LogDebug($"burn command is called for token id {AddScrapeTaskCommand.StartIndex}");
         return await _mediator.Send<AddScrapeTaskCommandResponse>(AddScrapeTaskCommand);
     }
     public async Task<ResetCommandResponse> ResetAsync(ResetCommand resetCommand)

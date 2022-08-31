@@ -37,7 +37,7 @@ public class TVMazeLambdaRunner
             {
                 if (!response.IsSuccess)
                 {
-                    _logger.LogError($"Error occurred for {response.TransactionType}. Error message: {response.ErrorMessage}");
+                    _logger.LogError($"Error occurred for {response.IsSuccess}. Error message: {response.ErrorMessage}");
                 }
             }
         }

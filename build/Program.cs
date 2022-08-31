@@ -48,7 +48,7 @@ public static class Program
 [IsDependentOn(typeof(DotnetCoreCleanTask))]
 [IsDependentOn(typeof(DotnetCoreRestoreTask))]
 [IsDependentOn(typeof(DotnetCoreBuildTask))]
-[IsDependentOn(typeof(DotnetCoreUnitTestTask))]
+//[IsDependentOn(typeof(DotnetCoreUnitTestTask))]
 [IsDependentOn(typeof(DotnetCorePublishTask))]
 
 public class DotnetBuildTask : FrostingTask

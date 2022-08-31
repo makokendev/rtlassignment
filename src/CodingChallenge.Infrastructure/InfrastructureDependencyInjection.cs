@@ -13,24 +13,24 @@ public static class InfrastructureDependencyInjection
     public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services, IConfiguration configuration,ILogger logger)
     {
         services.AddAutoMapper(typeof(InfrastructureDependencyInjection).Assembly);
-        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-        {
-            logger.LogDebug("opting for in memory database");
-            services.AddDbContext<TVMazeRecordDataModelDbContext>(options =>
-                options.UseInMemoryDatabase("NFTDatabase"));
-        }
-        else
-        {
-            logger.LogDebug("opting for sq lite database");
-            string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string dataSource = Path.Combine(assemblyFolder, "NFTDatabase.db");
-            services.AddDbContext<TVMazeRecordDataModelDbContext>(options =>
-                options.UseSqlite($"Data Source={dataSource};", options =>
-                    {
+        // if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+        // {
+        //     logger.LogDebug("opting for in memory database");
+        //     services.AddDbContext<TVMazeRecordDataModelDbContext>(options =>
+        //         options.UseInMemoryDatabase("NFTDatabase"));
+        // }
+        // else
+        // {
+        //     logger.LogDebug("opting for sq lite database");
+        //     string assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        //     string dataSource = Path.Combine(assemblyFolder, "NFTDatabase.db");
+        //     services.AddDbContext<TVMazeRecordDataModelDbContext>(options =>
+        //         options.UseSqlite($"Data Source={dataSource};", options =>
+        //             {
 
-                        options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
-                    }));
-        }
+        //                 options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName);
+        //             }));
+        // }
         services.AddNftEntityInfrastructure(configuration,logger);
         return services;
     }

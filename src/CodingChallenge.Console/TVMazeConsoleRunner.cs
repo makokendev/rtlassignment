@@ -46,7 +46,17 @@ public class TVMazeConsoleRunner
     private async Task HandleOptionsAsync()
     {
         _logger.LogDebug($"file is being passed...");
-        var response = await _TVMazeRecordCommandHandler.AddScrapeTaskAsync(new Application.NFT.Commands.Burn.AddScrapeTaskCommand(""));
+        var lastId = 0;
+        for (int i = 1; i <= 100; i++)
+        {
+            if (i % 20 == 0)
+            {
+                _logger.LogInformation($"modules ok last id {lastId}, index {i}");
+                var response = await _TVMazeRecordCommandHandler.AddScrapeTaskAsync(new Application.NFT.Commands.Burn.AddScrapeTaskCommand((lastId+1).ToString(),i.ToString()));
+                lastId = i;
+            }
+
+        }
     }
 
     public async Task HandleParseErrorAsync(IEnumerable<Error> errs)

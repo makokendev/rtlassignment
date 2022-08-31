@@ -38,7 +38,7 @@ public class CQRSTestBase : TestBase
     }
     public async Task<AddScrapeTaskCommandResponse> BurnScrapeCommandAsync(string tokenId)
     {
-        var command = new AddScrapeTaskCommand(tokenId);
+        var command = new AddScrapeTaskCommand(tokenId,"asdasd");
         return await Sender.Send(command);
     }
     public async Task<ResetCommandResponse> ResetCommandAsync()

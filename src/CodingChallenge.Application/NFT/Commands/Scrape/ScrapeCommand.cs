@@ -11,9 +11,9 @@ using CodingChallenge.Application.NFT.Base;
 
 namespace CodingChallenge.Application.NFT.Commands.Mint;
 
-public record ScrapeCommand(string TokenId,string Address) : TVMazeScrapeCommandBase(TokenId,TVMazeCommandType.Scrap), IRequest<ScrapeCommandResponse>;
+public record ScrapeCommand(string TokenId,string Address) : TVMazeScrapeCommandBase(), IRequest<ScrapeCommandResponse>;
 
-public record ScrapeCommandResponse(string TokenId,string WalletId) : TVMazeScrapeCommandResponseBase(TVMazeCommandType.Scrap);
+public record ScrapeCommandResponse(string TokenId,string WalletId) : TVMazeScrapeCommandResponseBase();
 
 public class ScrapeCommandHandler : IRequestHandler<ScrapeCommand, ScrapeCommandResponse>
 {

@@ -41,16 +41,24 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
         });
         _logger.LogDebug($"Mint repo action is successfully executed ... Token Id is {nFTEntity.TokenId}");
     }
-    public async Task AddScrapeTaskAsync(string tokenId)
+
+    public class AddScrapeTaskClass{
+        public string StartIndex{get;set;}
+        public string EndIndex{get;set;}
+    }
+    public async Task AddScrapeTaskAsync(string startIndex,string endIndex)
     {
-        _logger.LogDebug($"Burn repo action is being executed... Token Id is {tokenId}");
+        _logger.LogDebug($"Burn repo action is being executed... Token Id is {startIndex}");
         var publishRequest = new PublishRequest()
         {
-            Message = JsonConvert.SerializeObject(tokenId),
+            Message = JsonConvert.SerializeObject(new AddScrapeTaskClass(){
+                StartIndex = startIndex,
+                EndIndex = endIndex
+            }),
             TopicArn = TopicArn
         };
         await _snsClient.PublishAsync(publishRequest);
-        _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {tokenId}");
+        _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {startIndex}");
     }
 
     public async Task<TVMazeRecordEntity> GetByTokenIdAsync(string tokenId)

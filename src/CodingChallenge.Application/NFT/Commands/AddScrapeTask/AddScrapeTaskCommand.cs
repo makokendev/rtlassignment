@@ -8,33 +8,30 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace CodingChallenge.Application.NFT.Commands.Burn;
-public record AddScrapeTaskCommand(string TokenId) : TVMazeScrapeCommandBase(TokenId,TVMazeCommandType.Burn), IRequest<AddScrapeTaskCommandResponse>;
-public record AddScrapeTaskCommandResponse(string TokenId) : TVMazeScrapeCommandResponseBase(TVMazeCommandType.Burn);
+public record AddScrapeTaskCommand(string StartIndex,string EndIndex) : TVMazeScrapeCommandBase(), IRequest<AddScrapeTaskCommandResponse>;
+public record AddScrapeTaskCommandResponse(string TokenId) : TVMazeScrapeCommandResponseBase();
 
 public class AddScrapeTaskCommandHandler : IRequestHandler<AddScrapeTaskCommand, AddScrapeTaskCommandResponse>
 {
-    public AddScrapeTaskCommandHandler(ITVMazeRecordRepository repo, ILogger logger, IMapper mapper)
+    public AddScrapeTaskCommandHandler(ITVMazeRecordRepository repo, ILogger logger)
     {
         _repo = repo;
         _logger = logger;
-        _mapper = mapper;
     }
 
     public ITVMazeRecordRepository _repo { get; }
     public ILogger _logger { get; }
 
-    public IMapper _mapper { get; }
 
     public async Task<AddScrapeTaskCommandResponse> Handle(AddScrapeTaskCommand request, CancellationToken cancellationToken)
     {
         var entity = new TVMazeRecordEntity()
         {
-            TokenId = request.TokenId,
         };
 
-        await _repo.AddScrapeTaskAsync(request.TokenId);
+        await _repo.AddScrapeTaskAsync(request.StartIndex,request.EndIndex);
         _logger.LogDebug($"Dispatching event... response id is {entity.TokenId}...");
-        var response = new AddScrapeTaskCommandResponse(request.TokenId);
+        var response = new AddScrapeTaskCommandResponse(request.StartIndex);
         _logger.LogDebug($"deleted the entry hopefully response id is {response.TokenId}");
         return response;
     }

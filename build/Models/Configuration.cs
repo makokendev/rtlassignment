@@ -8,6 +8,7 @@ using Cake.Yaml;
 using CodingChallenge.Cdk;
 using CodingChallenge.Infrastructure;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace CodingChallenge.CakeBuild.Models;
 public class Settings
@@ -60,6 +61,10 @@ public class Settings
             );
         var autoMapper = autoMapperConfig.CreateMapper();
         autoMapper.Map(metadata, AwsApplication);
+        cakeContext.Information($"json object {JsonConvert.SerializeObject(AwsApplication)}");
+        System.Environment.SetEnvironmentVariable($"{Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX}__{nameof(AwsApplication.Platform)}",AwsApplication.Platform);
+        System.Environment.SetEnvironmentVariable($"{Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX}__{nameof(AwsApplication.System)}",AwsApplication.System);
+        System.Environment.SetEnvironmentVariable($"{Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX}__{nameof(AwsApplication.Subsystem)}",AwsApplication.Subsystem);
     }
 }
 

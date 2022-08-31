@@ -12,8 +12,8 @@ using CodingChallenge.Application.NFT.Base;
 namespace CodingChallenge.Application.NFT.Commands.Transfer;
 
 
-public record TransferCommand(string TokenId,string From, string To) : TVMazeScrapeCommandBase(TokenId,TVMazeCommandType.Transfer), IRequest<TransferCommandResponse>;
-public record TransferCommandResponse(string TokenId, string NewWalletId) : TVMazeScrapeCommandResponseBase(TVMazeCommandType.Transfer);
+public record TransferCommand(string TokenId,string From, string To) : TVMazeScrapeCommandBase(), IRequest<TransferCommandResponse>;
+public record TransferCommandResponse(string TokenId, string NewWalletId) : TVMazeScrapeCommandResponseBase();
 
 public class TransferCommandHandler : IRequestHandler<TransferCommand, TransferCommandResponse>
 {

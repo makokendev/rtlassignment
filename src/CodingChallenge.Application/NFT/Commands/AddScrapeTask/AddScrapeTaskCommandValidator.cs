@@ -6,15 +6,15 @@ public class AddScrapeTaskCommandValidator : AbstractValidator<AddScrapeTaskComm
 {
     public AddScrapeTaskCommandValidator()
     {
-        RuleFor(v => v.TokenId)
-           .NotEmpty()
-           .Custom((tokenId, context) =>
-       {
-           if (!tokenId.IsHex())
-           {
-               context.AddFailure("Token Id must be Hexadecimal");
-           }
-       });
+    //     RuleFor(v => v.TokenId)
+    //        .NotEmpty()
+    //        .Custom((tokenId, context) =>
+    //    {
+    //     //    if (!tokenId.IsHex())
+    //     //    {
+    //     //       // context.AddFailure("Token Id must be Hexadecimal");
+    //     //    }
+    //    });
     }
 }
 
