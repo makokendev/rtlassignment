@@ -1,3 +1,3 @@
 namespace CodingChallenge.Domain.Entities.NFT;
 
-public record NFTWallet(string WalletId);
+public record NFTWallet(int WalletId);

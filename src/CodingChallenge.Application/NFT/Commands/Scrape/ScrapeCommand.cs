@@ -11,9 +11,9 @@ using CodingChallenge.Application.NFT.Base;
 
 namespace CodingChallenge.Application.NFT.Commands.Mint;
 
-public record ScrapeCommand(string TokenId,string Address) : TVMazeScrapeCommandBase(), IRequest<ScrapeCommandResponse>;
+public record ScrapeCommand(int index) : TVMazeScrapeCommandBase(), IRequest<ScrapeCommandResponse>;
 
-public record ScrapeCommandResponse(string TokenId,string WalletId) : TVMazeScrapeCommandResponseBase();
+public record ScrapeCommandResponse(int index) : TVMazeScrapeCommandResponseBase();
 
 public class ScrapeCommandHandler : IRequestHandler<ScrapeCommand, ScrapeCommandResponse>
 {
@@ -31,15 +31,18 @@ public class ScrapeCommandHandler : IRequestHandler<ScrapeCommand, ScrapeCommand
 
     public async Task<ScrapeCommandResponse> Handle(ScrapeCommand request, CancellationToken cancellationToken)
     {
-        var retRec = new ScrapeCommandResponse(request.TokenId, request.Address);
+        var retRec = new ScrapeCommandResponse(request.index);
         try
         {
-            var entity = _mapper.Map<ScrapeCommand, TVMazeRecordEntity>(request);
-            entity.Created = DateTime.Now;
-            entity.CreatedBy = "CurrentUserId";
-            _logger.LogDebug($"handling.... ScrapeCommandHandler... id:{entity.TokenId} -- sortkey:{entity.Wallet}");
-            await _repo.ScrapeAsync(entity);
-
+            var result = await _repo.ScrapeAsync(request.index);
+            if (result.IsSuccessful)
+            {
+                retRec.ErrorMessage = $"not successful.";
+            }
+            if (result.RateLimited)
+            {
+                retRec.ErrorMessage = $"rate limited.";
+            }
         }
         catch (NFTTokenAlreadyExistsException ex)
         {

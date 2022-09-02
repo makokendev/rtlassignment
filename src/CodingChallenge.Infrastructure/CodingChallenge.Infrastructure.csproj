@@ -12,6 +12,8 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5"/>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5"/>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5"/>
+		<PackageReference Include="RestSharp" Version="108.0.1" />
+
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\CodingChallenge.Application\CodingChallenge.Application.csproj"/>

@@ -47,15 +47,14 @@ public class TVMazeConsoleRunner
     {
         _logger.LogDebug($"file is being passed...");
         var lastId = 0;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= 200; i++)
         {
-            if (i % 20 == 0)
+            if (i % 10 == 0)
             {
                 _logger.LogInformation($"modules ok last id {lastId}, index {i}");
-                var response = await _TVMazeRecordCommandHandler.AddScrapeTaskAsync(new Application.NFT.Commands.Burn.AddScrapeTaskCommand((lastId+1).ToString(),i.ToString()));
+                var response = await _TVMazeRecordCommandHandler.AddScrapeTaskAsync(new Application.NFT.Commands.Burn.AddScrapeTaskCommand((lastId+1),i,0));
                 lastId = i;
             }
-
         }
     }
 

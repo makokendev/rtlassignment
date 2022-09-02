@@ -61,6 +61,8 @@ public class Settings
             );
         var autoMapper = autoMapperConfig.CreateMapper();
         autoMapper.Map(metadata, AwsApplication);
+        cakeContext.Information($"metadata platform is {metadata.Platform}");
+        cakeContext.Information($"AwsApplication platform is {AwsApplication.Platform}");
         cakeContext.Information($"json object {JsonConvert.SerializeObject(AwsApplication)}");
         System.Environment.SetEnvironmentVariable($"{Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX}__{nameof(AwsApplication.Platform)}",AwsApplication.Platform);
         System.Environment.SetEnvironmentVariable($"{Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX}__{nameof(AwsApplication.System)}",AwsApplication.System);

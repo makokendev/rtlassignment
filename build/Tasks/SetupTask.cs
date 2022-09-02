@@ -4,6 +4,7 @@ using CodingChallenge.CakeBuild.Models;
 using CodingChallenge.Cdk.Stacks;
 using CodingChallenge.Infrastructure;
 
+
 namespace CodingChallenge.CakeBuild.Tasks;
 [TaskName("Setup-Task")]
 public sealed class SetupTask : FrostingTask<BuildContext>

@@ -11,6 +11,10 @@ using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using CodingChallenge.Infrastructure.Extensions;
 using Newtonsoft.Json;
+using RestSharp;
+using CodingChallenge.Application.NFT.Commands.Burn;
+using CodingChallenge.Domain.Entities;
+using System.Net;
 
 namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeRecordDataModel>, ITVMazeRecordRepository
@@ -28,37 +32,117 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
         _mapper = mapper;
         this._logger = logger;
         _snsClient = new AmazonSimpleNotificationServiceClient();
+        _logger.LogInformation($"AWS OBJECT -> {JsonConvert.SerializeObject(awsApplication)}");
         TopicArn = $"arn:aws:sns:us-east-1:476631482508:{awsApplication.GetResourceName(eventTopicSuffix)}";
     }
 
-    public async Task ScrapeAsync(TVMazeRecordEntity nFTEntity)
+    // Task<Domain.Entities.TVMazeCastHttpCallResponse> ITVMazeRecordRepository.GetTVMazeCastById(string id)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    public async Task<Domain.Entities.TVMazeCastHttpCallResponse> GetTVMazeCastById(int id)
     {
-        _logger.LogDebug($"Mint repo action is being executed... Token Id is {nFTEntity.TokenId}");
-        var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(nFTEntity);
+        var retObj = new TVMazeCastHttpCallResponse();
+        var response = await TVMazeCastByShowIdHttpGetCall(id);
+        if (response == null)
+        {
+            retObj.IsSuccessful = false;
+            _logger.LogInformation($"response--EXITING. {id} getting tv maze cast by id :{id} - SUCCESS");
+            return retObj;
+        }
+        _logger.LogInformation($"{id} - StatusCode response code is {response.StatusCode}");
+        _logger.LogInformation($"error mesage code is {response.ErrorMessage}");
 
-        await this.SaveAsync(new List<TVMazeRecordDataModel>(){
-            dataModel
-        });
-        _logger.LogDebug($"Mint repo action is successfully executed ... Token Id is {nFTEntity.TokenId}");
+        _logger.LogInformation($"response json is {JsonConvert.SerializeObject(response)}");
+
+        if (response.IsSuccessful)
+        {
+            _logger.LogInformation($"response--SUCCESS. {id} getting tv maze cast by id :{id} - SUCCESS");
+            retObj.IsSuccessful = true;
+            retObj.RateLimited = false;
+            retObj.CastList = JsonConvert.DeserializeObject<List<TVMazeCastItem>>(response.Content);
+            return retObj;
+        }
+        if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+        {
+            retObj.IsSuccessful = false;
+            retObj.RateLimited = true;
+            _logger.LogInformation($"response--TOOMANY. {id} getting tv maze cast by id :{id} - TOO MANY");
+        }
+        else
+        {
+            retObj.IsSuccessful = false;
+            retObj.RateLimited = false;
+            _logger.LogInformation($"response--ERROR. {id} getting tv maze cast by id :{id} - ERROR");
+        }
+        return retObj;
     }
 
-    public class AddScrapeTaskClass{
-        public string StartIndex{get;set;}
-        public string EndIndex{get;set;}
-    }
-    public async Task AddScrapeTaskAsync(string startIndex,string endIndex)
+    private async Task<RestResponse> TVMazeCastByShowIdHttpGetCall(int id)
     {
-        _logger.LogDebug($"Burn repo action is being executed... Token Id is {startIndex}");
+        try
+        {
+            var baseurl = "https://api.tvmaze.com";
+            _logger.LogInformation($"getting tv maze cast by id :{id}");
+            var options = new RestClientOptions(baseurl)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            var client = new RestClient(options)
+            {
+            };
+            var request = new RestRequest($"shows/{id}/cast");
+
+            var response = await client.GetAsync(request);
+            return response;
+        }
+        catch (WebException ex)
+        {
+            _logger.LogError($"{id} - web exception error {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"{id} - generic web exception error {ex.Message}. Type {ex.GetType().Name}");
+        }
+        return null;
+    }
+
+    public async Task<TVMazeCastHttpCallResponse> ScrapeAsync(int index)
+    {
+        //_logger.LogDebug($"Mint repo action is being executed... Token Id is {nFTEntity.TokenId}");
+
+        var result = await GetTVMazeCastById(index);
+        if (result.IsSuccessful)
+        {
+            _logger.LogInformation($"get tv maze cast by id is successfull id is {index}");
+        }
+        else if (!result.IsSuccessful && result.RateLimited)
+        {
+            _logger.LogInformation($"get tv maze cast by id is rate limited. id is {index}");
+        }
+        else
+        {
+            _logger.LogInformation($"things have gone wrong dude. id is {index}");
+        }
+        return result;
+
+        // var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(nFTEntity);
+        // await this.SaveAsync(new List<TVMazeRecordDataModel>(){
+        //     dataModel
+        // });
+    }
+
+
+    public async Task AddScrapeTaskAsync(AddScrapeTaskCommand command)
+    {
+        _logger.LogDebug($"Burn repo action is being executed... Token Id is {command.StartIndex}");
         var publishRequest = new PublishRequest()
         {
-            Message = JsonConvert.SerializeObject(new AddScrapeTaskClass(){
-                StartIndex = startIndex,
-                EndIndex = endIndex
-            }),
+            Message = JsonConvert.SerializeObject(command),
             TopicArn = TopicArn
         };
         await _snsClient.PublishAsync(publishRequest);
-        _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {startIndex}");
+        _logger.LogDebug($"Burn repo action is successfully executed... Token Id is {command.StartIndex}");
     }
 
     public async Task<TVMazeRecordEntity> GetByTokenIdAsync(string tokenId)
@@ -99,4 +183,6 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
         });
         _logger.LogDebug($"Transfer repo action is successfully executed ... Token Id is {nFTEntity.TokenId}");
     }
+
+
 }

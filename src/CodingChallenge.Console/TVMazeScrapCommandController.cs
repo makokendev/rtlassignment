@@ -19,7 +19,7 @@ public class TVMazeScrapeCommandController
 
     public async Task<AddScrapeTaskCommandResponse> AddScrapeTaskAsync(AddScrapeTaskCommand addScrapeTaskCommand)
     {
-        _logger.LogDebug($"mint command is called for token id");
+        _logger.LogDebug($"Add scrape task command is called for token id");
         return await _mediator.Send<AddScrapeTaskCommandResponse>(addScrapeTaskCommand);
     }
 }

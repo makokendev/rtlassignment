@@ -10,13 +10,13 @@ namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 
 public class TVMazeRecordDataModelTVMazeRecordEntityResolver : IValueResolver<TVMazeRecordDataModel, TVMazeRecordEntity, NFTWallet>
 {
-    public NFTWallet Resolve(TVMazeRecordDataModel source, TVMazeRecordEntity destination, NFTWallet member, ResolutionContext context) => new NFTWallet(source.WalletId);
+    public NFTWallet Resolve(TVMazeRecordDataModel source, TVMazeRecordEntity destination, NFTWallet member, ResolutionContext context) => new NFTWallet(source.TokenId);
 }
 public class TVMazeRecordDataModel : AuditableEntity, IMapFrom<TVMazeRecordEntity>
 {
 
     [DynamoDBRangeKey]
-    public string TokenId { get; set; }
+    public int TokenId { get; set; }
     [DynamoDBHashKey]
     public string WalletId { get; set; }
     [DynamoDBProperty]

@@ -4,7 +4,6 @@ using System.IO;
 using CodingChallenge.Application.NFT.Base;
 using CodingChallenge.Application.NFT.Commands.Burn;
 using CodingChallenge.Application.NFT.Commands.Mint;
-using CodingChallenge.Application.NFT.Commands.Transfer;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -32,10 +31,7 @@ public static class JsonCommandExtensions
                 {
                     return JsonConvert.DeserializeObject<AddScrapeTaskCommand>(itemJsonText);
                 }
-            case TVMazeCommandType.Transfer:
-                {
-                    return JsonConvert.DeserializeObject<TransferCommand>(itemJsonText);
-                }
+          
             default: break;
 
         }

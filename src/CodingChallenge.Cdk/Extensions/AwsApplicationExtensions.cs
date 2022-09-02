@@ -35,7 +35,8 @@ public static class AwsApplicationExtensions
         {
             QueueName = resourceName,
             RetentionPeriod = Duration.Days(10),
-            //VisibilityTimeout = Duration.Seconds(0),
+            //VisibilityTimeout = Duration.Seconds(15),
+            DeliveryDelay = Duration.Seconds(10),
             ReceiveMessageWaitTime = Duration.Seconds(0),
             DeadLetterQueue = deadLetterQueue,
         };
