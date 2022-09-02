@@ -24,26 +24,33 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
             RootResourceId = restApiRootResourceId
         });
 
-        
-        var apiDeployment =new Deployment(this, "new deployment", new DeploymentProps
+
+        var apiDeployment = new Deployment(this, "new deployment", new DeploymentProps
         {
             Api = api,
-            Description = "new sns, wallet and token resources",
+            Description = "cast resource",
             RetainDeployments = true,
 
         });
-        apiDeployment.AddToLogicalId(DateTime.UtcNow.ToLongDateString()); //need force change deployment hash to force new deployment
+        apiDeployment.AddToLogicalId($"{DateTime.UtcNow.ToLongDateString()}-{DateTime.UtcNow.ToLongTimeString()}"); //need force change deployment hash to force new deployment
         apiDeployment.Node.AddDependency(SetSnsEndpoint(awsApplication, api, apigwRole, eventTopic));
         apiDeployment.Node.AddDependency(SetWalletEndpoint(awsApplication, api, apigwRole));
-        apiDeployment.Node.AddDependency(SetTokenEndpoint(awsApplication, api, apigwRole));
+        apiDeployment.Node.AddDependency(SetCastEndpoint(awsApplication, api, apigwRole));
+
+
         //  if the 'stageName' already exists (from the core apigateway deployment) then the existing stage will be used !
+        new Amazon.CDK.AWS.APIGateway.Stage(this, awsApplication.GetResourceName("stagedeployment"), new Amazon.CDK.AWS.APIGateway.StageProps()
+        {
+            StageName = "stage",
+            Deployment = apiDeployment,
+        });
     }
 
 
     private Method SetWalletEndpoint(AWSAppProject awsApplication, IRestApi api, IRole apigwRole)
     {
         var walletIntegration = GetDynamoDbWalletQueryIntegration(awsApplication, apigwRole);
-        var token = api.Root.AddResource("wallet");
+        var token = api.Root.AddResource("movies");
         return token.AddMethod("GET", walletIntegration, new MethodOptions()
         {
             MethodResponses = new MethodResponse[]{
@@ -53,10 +60,10 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
             }
         });
     }
-    private Method SetTokenEndpoint(AWSAppProject awsApplication, IRestApi api, IRole apigwRole)
+    private Method SetCastEndpoint(AWSAppProject awsApplication, IRestApi api, IRole apigwRole)
     {
         var walletIntegration = GetDynamoDbTokenScanIntegration(awsApplication, apigwRole);
-        var token = api.Root.AddResource("token");
+        var token = api.Root.AddResource("cast");
         return token.AddMethod("GET", walletIntegration, new MethodOptions()
         {
             MethodResponses = new MethodResponse[]{
@@ -118,13 +125,13 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
         {
             Key = new
             {
-                TokenId = new
+                TVMazeIndex = new
                 {
                     S = "$method.request.querystring.id"
                 },
-                WalletId = new
+                TVMazeType = new
                 {
-                    S = "$method.request.querystring.walletid"
+                    S = "$method.request.querystring.tvmazetype"
                 }
             },
             TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
@@ -165,23 +172,23 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
         {
             Key = new
             {
-                TokenId = new
+                TVMazeIndex = new
                 {
                     S = "$method.request.querystring.id"
                 },
-                WalletId = new
+                TVMazeType = new
                 {
-                    S = "$method.request.querystring.walletid"
+                    S = "$method.request.querystring.tvmazetype"
                 }
             },
             TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
         };
         var queryRequestTemplate = new Dictionary<string, object>{
             {"TableName",awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))},
-            {"KeyConditionExpression","WalletId = :c"},
+            {"KeyConditionExpression","TVMazeType = :c"},
             {"ExpressionAttributeValues",new Dictionary<string,object>{
                 {":c",new Dictionary<string,object>{
-                    {"S","$method.request.querystring.walletid"}
+                    {"S","$method.request.querystring.tvmazetype"}
                 }}
             }}
         };
@@ -221,20 +228,20 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
         {
             Key = new
             {
-                TokenId = new
+                TVMazeIndex = new
                 {
                     S = "$method.request.querystring.id"
                 },
-                WalletId = new
+                TVMazeType = new
                 {
-                    S = "$method.request.querystring.walletid"
+                    S = "$method.request.querystring.tvmazetype"
                 }
             },
             TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
         };
         var scanRequestExample = new Dictionary<string, object>{
             {"TableName",awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))},
-            {"FilterExpression","TokenId = :c"},
+            {"FilterExpression","TVMazeIndex = :c"},
             {"ExpressionAttributeValues",new Dictionary<string,object>{
                 {":c",new Dictionary<string,object>{
                     {"S","$method.request.querystring.id"}

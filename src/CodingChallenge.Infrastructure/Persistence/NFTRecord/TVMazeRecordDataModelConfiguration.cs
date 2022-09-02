@@ -6,8 +6,8 @@ public class TVMazeRecordDataModelConfiguration : IEntityTypeConfiguration<TVMaz
 {
     public void Configure(EntityTypeBuilder<TVMazeRecordDataModel> builder)
     {
-        builder.HasKey(m => m.Index);
-        builder.Property(t => t.Index)
+        builder.HasKey(m => m.TVMazeIndex);
+        builder.Property(t => t.TVMazeIndex)
             .HasMaxLength(200)
             .IsRequired();
         builder.Property(t => t.TVMazeType)
