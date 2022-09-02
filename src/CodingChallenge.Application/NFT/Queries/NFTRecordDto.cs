@@ -12,8 +12,8 @@ public class TVMazeRecordDto : IMapFrom<TVMazeRecordEntity>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<TVMazeRecordEntity, TVMazeRecordDto>()
-            .ForMember(d => d.TokenId, opt => opt.MapFrom(s => s.TokenId))
-            .ForMember(d => d.WalletId, opt => opt.MapFrom(s => s.Wallet.WalletId));
+            .ForMember(d => d.TokenId, opt => opt.MapFrom(s => s.Index))
+            .ForMember(d => d.WalletId, opt => opt.MapFrom(s => s.CastList));
    
     }
 }

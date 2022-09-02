@@ -26,13 +26,13 @@ public sealed class DatabaseStack : Stack
         dynamoDbTableProps.PartitionKey = new Amazon.CDK.AWS.DynamoDB.Attribute()
         {
             Type = Amazon.CDK.AWS.DynamoDB.AttributeType.STRING,
-            Name = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel.WalletId)
+            Name = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel.TVMazeType)
         };
 
         dynamoDbTableProps.SortKey = new Amazon.CDK.AWS.DynamoDB.Attribute()
         {
             Type = Amazon.CDK.AWS.DynamoDB.AttributeType.STRING,
-            Name = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel.TokenId)
+            Name = nameof(Infrastructure.Persistence.TVMazeRecord.TVMazeRecordDataModel.Index)
         };
         var table = new Table(this, dynamoDBTableFullName, dynamoDbTableProps);
         awsApplication.SetCfOutput(this, $"{typeof(TVMazeRecordDataModel).Name.ToLower()}-{arnSuffixValue}", table.TableArn);

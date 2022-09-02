@@ -6,11 +6,11 @@ public class TVMazeRecordDataModelConfiguration : IEntityTypeConfiguration<TVMaz
 {
     public void Configure(EntityTypeBuilder<TVMazeRecordDataModel> builder)
     {
-        builder.HasKey(m => m.TokenId);
-        builder.Property(t => t.TokenId)
+        builder.HasKey(m => m.Index);
+        builder.Property(t => t.Index)
             .HasMaxLength(200)
             .IsRequired();
-        builder.Property(t => t.WalletId)
+        builder.Property(t => t.TVMazeType)
             .HasMaxLength(200)
             .IsRequired();
         builder.Property(t => t.CreatedBy)

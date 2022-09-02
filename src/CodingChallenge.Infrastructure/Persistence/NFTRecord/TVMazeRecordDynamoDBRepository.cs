@@ -15,6 +15,7 @@ using RestSharp;
 using CodingChallenge.Application.NFT.Commands.Burn;
 using CodingChallenge.Domain.Entities;
 using System.Net;
+using System.Linq;
 
 namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeRecordDataModel>, ITVMazeRecordRepository
@@ -112,9 +113,24 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
         //_logger.LogDebug($"Mint repo action is being executed... Token Id is {nFTEntity.TokenId}");
 
         var result = await GetTVMazeCastById(index);
+
         if (result.IsSuccessful)
         {
             _logger.LogInformation($"get tv maze cast by id is successfull id is {index}");
+            if(result.CastList == null || !result.CastList.Any()){
+                 _logger.LogInformation($"{index} - cast list is empty");
+                 return result;
+            }
+            var entity = new TVMazeRecordEntity()
+            {
+                Index = index,
+                CastList = result.CastList,
+                ProductionType = "Movie"
+            };
+             var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(entity);
+        await this.SaveAsync(new List<TVMazeRecordDataModel>(){
+            dataModel
+        });
         }
         else if (!result.IsSuccessful && result.RateLimited)
         {
@@ -126,10 +142,7 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
         }
         return result;
 
-        // var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(nFTEntity);
-        // await this.SaveAsync(new List<TVMazeRecordDataModel>(){
-        //     dataModel
-        // });
+       
     }
 
 
@@ -157,7 +170,7 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
     public async Task<List<TVMazeRecordEntity>> GetByWalletIdAsync(string walletId)
     {
         _logger.LogDebug($"Get tokens from wallet repo action is being executed... Wallet Id is {walletId}");
-        var results = await GetBySortKeyAsync(nameof(TVMazeRecordDataModel.WalletId), walletId);
+        var results = await GetBySortKeyAsync(nameof(TVMazeRecordDataModel.TVMazeType), walletId);
         var mappedEntity = _mapper.Map<List<TVMazeRecordDataModel>, List<TVMazeRecordEntity>>(results);
         _logger.LogDebug($"Get tokens from wallet repo action is successfully executed for wallet with Id {walletId}. Returning result");
         return mappedEntity;
@@ -168,21 +181,5 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
         await Task.CompletedTask;
         throw new NotSupportedException("Reset Action is not supported at his point");
     }
-    public async Task TransferAsync(TVMazeRecordEntity nFTEntity, string newWalletId)
-    {
-        _logger.LogDebug($"Transfer repo action is being executed... Token Id is {nFTEntity.TokenId}");
-        var dataModel = _mapper.Map<TVMazeRecordEntity, TVMazeRecordDataModel>(nFTEntity);
-        var token = await GetAsync(nFTEntity.TokenId);
-        if (token == null)
-        {
-            throw new NFTTokenNotFoundException($"Token with id {nFTEntity.TokenId} does not exist in the database");
-        }
-        token.WalletId = newWalletId;
-        await UpdateAsync(new List<TVMazeRecordDataModel>(){
-            token
-        });
-        _logger.LogDebug($"Transfer repo action is successfully executed ... Token Id is {nFTEntity.TokenId}");
-    }
-
-
+   
 }

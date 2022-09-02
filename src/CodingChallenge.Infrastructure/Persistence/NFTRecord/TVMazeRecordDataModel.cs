@@ -1,8 +1,12 @@
-﻿using Amazon.DynamoDBv2.DataModel;
+﻿using System;
+using System.Collections.Generic;
+using Amazon.DynamoDBv2.DataModel;
 using AutoMapper;
 using CodingChallenge.Application.AutoMapper;
 using CodingChallenge.Domain.Base;
+using CodingChallenge.Domain.Entities;
 using CodingChallenge.Domain.Entities.NFT;
+using Newtonsoft.Json;
 
 namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 
@@ -10,27 +14,28 @@ namespace CodingChallenge.Infrastructure.Persistence.TVMazeRecord;
 
 public class TVMazeRecordDataModelTVMazeRecordEntityResolver : IValueResolver<TVMazeRecordDataModel, TVMazeRecordEntity, NFTWallet>
 {
-    public NFTWallet Resolve(TVMazeRecordDataModel source, TVMazeRecordEntity destination, NFTWallet member, ResolutionContext context) => new NFTWallet(source.TokenId);
+    public NFTWallet Resolve(TVMazeRecordDataModel source, TVMazeRecordEntity destination, NFTWallet member, ResolutionContext context) => new NFTWallet(Convert.ToInt32(source.Index));
 }
 public class TVMazeRecordDataModel : AuditableEntity, IMapFrom<TVMazeRecordEntity>
 {
 
     [DynamoDBRangeKey]
-    public int TokenId { get; set; }
+    public string Index { get; set; }
     [DynamoDBHashKey]
-    public string WalletId { get; set; }
+    public string TVMazeType { get; set; }
     [DynamoDBProperty]
-    public string Type { get; set; }
+    public List<TVMazeCastItem> CastList { get; set; }
 
 
     public void Mapping(Profile profile)
     {
         profile.CreateMap<TVMazeRecordEntity, TVMazeRecordDataModel>()
-            .ForMember(d => d.TokenId, opt => opt.MapFrom(s => s.TokenId))
-            .ForMember(d => d.WalletId, opt => opt.MapFrom(s => s.Wallet.WalletId));
+            .ForMember(d => d.Index, opt => opt.MapFrom(s => s.Index.ToString()))
+            .ForMember(d => d.TVMazeType, opt => opt.MapFrom(s => s.ProductionType));
         profile.CreateMap<TVMazeRecordDataModel, TVMazeRecordEntity>()
-            .ForMember(d => d.TokenId, opt => opt.MapFrom(s => s.TokenId))
-            .ForMember(d => d.Wallet, opt => opt.MapFrom<TVMazeRecordDataModelTVMazeRecordEntityResolver>());
+            .ForMember(d => d.Index, opt => opt.MapFrom(s => s.Index))
+            .ForMember(d => d.ProductionType, opt => opt.MapFrom(s => s.TVMazeType));
+            //.ForMember(d => d.CastList, opt => opt.MapFrom(s=>JsonConvert.SerializeObject(s.CastList)));
     }
 }
 
