@@ -8,9 +8,9 @@ public class NFTTokenNotFoundException : Exception
     {
     }
 }
-public class NFTTokenAlreadyExistsException : Exception
+public class TVMazeItemAlreadyExistsException : Exception
 {
-    public NFTTokenAlreadyExistsException(string message)
+    public TVMazeItemAlreadyExistsException(string message)
         : base(message)
     {
     }

@@ -1,4 +1,4 @@
-namespace CodingChallenge.Application.NFT.Base;
+namespace CodingChallenge.Application.TVMaze.Base;
 public abstract record TVMazeScrapeCommandResponseBase
 {
     public TVMazeScrapeCommandResponseBase()

@@ -12,6 +12,7 @@ public class TestBase
     protected ILogger Logger;
     protected ServiceProvider ServiceProvider;
     protected ISender Sender;
+    public  AWSAppProject awsApplication;
 
     protected virtual void Init()
     {
@@ -24,14 +25,21 @@ public class TestBase
     {
         Configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables().Build();
+        awsApplication = new AWSAppProject();
+        Configuration.GetSection(Constants.APPLICATION_ENVIRONMENT_VAR_PREFIX).Bind(awsApplication);
+        awsApplication.Environment = "dev";
+        awsApplication.Platform = "assignments";
+        awsApplication.System = "rtl";
+        awsApplication.Subsystem = "tvmaze";
     }
 
     protected virtual void ConfigureServices(IServiceCollection services)
     {
         var debugLogger = new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider().CreateLogger("testbase");
         services.AddApplicationBaseDependencies();
-        services.AddInfrastructureDependencies(Configuration,debugLogger);
+        services.AddInfrastructureDependencies(Configuration, debugLogger);
         services.AddSingleton<ILogger>(Logger);
+        services.AddSingleton<AWSAppProject>(awsApplication);
         //services.AddTransient<NFTCommandController, NFTCommandController>();
         //services.AddTransient<NFTConsoleRunner, NFTConsoleRunner>();
         ServiceProvider = services.BuildServiceProvider();

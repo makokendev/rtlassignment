@@ -1,5 +1,5 @@
 ﻿// using System.Threading.Tasks;
-// using CodingChallenge.Application.NFT.Commands.Mint;
+// using CodingChallenge.Application.TVMaze.Commands.Mint;
 // using Newtonsoft.Json;
 // using Xunit;
 // using CodingChallenge.Application.IntegrationTests.NFT.Commands;

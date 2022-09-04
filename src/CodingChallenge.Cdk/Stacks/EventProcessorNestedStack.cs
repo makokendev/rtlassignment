@@ -45,8 +45,8 @@ public sealed class EventProcessorNestedStack : Amazon.CDK.NestedStack
         var baseSettings = new LamdaFunctionCdkSettings
         {
             FunctionNameSuffix = functionSuffix.ToLower(),
-            Memory = 512,
-            ReservedConcurrentExecutions = 2,
+            Memory = 2048,
+            ReservedConcurrentExecutions = 60,
             Timeout = 30,
             RoleArn = roleArn,
             ImageUri = repoUri,

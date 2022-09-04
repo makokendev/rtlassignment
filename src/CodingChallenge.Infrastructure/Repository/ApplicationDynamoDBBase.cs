@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CodingChallenge.Infrastructure.Extensions;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2.Model;
 
 namespace CodingChallenge.Infrastructure.Repository;
 
@@ -20,7 +21,7 @@ public class ApplicationDynamoDBBase<T> : DynamoDBRepository, IApplicationDynamo
 {
     protected virtual DynamoDBOperationConfig DynamoDBOperationConfig { get; }
 
-    public ApplicationDynamoDBBase(ILogger logger, AWSAppProject awsApplication) : base(logger,awsApplication)
+    public ApplicationDynamoDBBase(ILogger logger, AWSAppProject awsApplication) : base(logger, awsApplication)
     {
         DynamoDBOperationConfig = GetOperationConfig(AwsApplication.GetDynamodbTableName(typeof(T)));
     }
@@ -37,6 +38,34 @@ public class ApplicationDynamoDBBase<T> : DynamoDBRepository, IApplicationDynamo
         var result = await Context.LoadAsync<T>(id, DynamoDBOperationConfig);
         return result;
     }
+
+
+//  var getItemRequestTemplate = new
+//         {
+//             Key = new
+//             {
+//                 TVMazeIndex = new
+//                 {
+//                     S = "$method.request.querystring.id"
+//                 },
+//                 TVMazeType = new
+//                 {
+//                     S = "$method.request.querystring.tvmazetype"
+//                 }
+//             },
+//             TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
+//         };
+//         var queryRequestTemplate = new Dictionary<string, object>{
+//             {"TableName",awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))},
+//             {"KeyConditionExpression","TVMazeType = :c"},
+//             {"ExpressionAttributeValues",new Dictionary<string,object>{
+//                 {":c",new Dictionary<string,object>{
+//                     {"S","$method.request.querystring.tvmazetype"}
+//                 }}
+//             }}
+//         };
+
+
     public async Task<List<T>> GetBySortKeyAsync(string sortKeyField, string sortKeyValue)
     {
 
@@ -46,9 +75,9 @@ public class ApplicationDynamoDBBase<T> : DynamoDBRepository, IApplicationDynamo
 
     public async Task SaveAsync(List<T> dataModelItems)
     {
-        Logger.LogInformation($"ApplicationDynamoDBBase... SaveAsync");
+        //Logger.LogInformation($"ApplicationDynamoDBBase... SaveAsync");
         var dataModelBatch = Context.CreateBatchWrite<T>(DynamoDBOperationConfig);
-        Logger.LogInformation($"log information... item count {dataModelItems.Count}");
+        //Logger.LogInformation($"log information... item count {dataModelItems.Count}");
         dataModelBatch.AddPutItems(dataModelItems);
         await dataModelBatch.ExecuteAsync();
     }

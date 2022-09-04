@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using CodingChallenge.Application.NFT.Base;
-namespace CodingChallenge.Application.NFT.Commands.Burn;
+using CodingChallenge.Application.TVMaze.Base;
+namespace CodingChallenge.Application.TVMaze.Commands.Burn;
 
 public class AddScrapeTaskCommandValidator : AbstractValidator<AddScrapeTaskCommand>
 {

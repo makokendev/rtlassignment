@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Numerics;
 
-namespace CodingChallenge.Application.NFT.Base;
+namespace CodingChallenge.Application.TVMaze.Base;
 
 public static class ValidationExtensions
 {

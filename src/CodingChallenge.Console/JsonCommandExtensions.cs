@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CodingChallenge.Application.NFT.Base;
-using CodingChallenge.Application.NFT.Commands.Burn;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Base;
+using CodingChallenge.Application.TVMaze.Commands.Burn;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 

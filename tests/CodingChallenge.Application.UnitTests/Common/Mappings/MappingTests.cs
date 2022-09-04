@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using AutoMapper;
 using CodingChallenge.Application.AutoMapper;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using CodingChallenge.Domain.Entities.NFT;
 using Xunit;
 

@@ -1,7 +1,7 @@
-﻿using CodingChallenge.Application.NFT.Base;
+﻿using CodingChallenge.Application.TVMaze.Base;
 using FluentValidation;
 
-namespace CodingChallenge.Application.NFT.Commands.Mint;
+namespace CodingChallenge.Application.TVMaze.Commands.Mint;
 
 public class ScrapeCommandValidator : AbstractValidator<ScrapeCommand>
 {

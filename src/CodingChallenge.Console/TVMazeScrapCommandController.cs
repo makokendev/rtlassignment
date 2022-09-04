@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using CodingChallenge.Application.NFT.Commands.Burn;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Commands.Burn;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

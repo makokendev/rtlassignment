@@ -176,19 +176,19 @@ public sealed class ApiGatewayNestedStack : Amazon.CDK.NestedStack
                 {
                     S = "$method.request.querystring.id"
                 },
-                TVMazeType = new
-                {
-                    S = "$method.request.querystring.tvmazetype"
-                }
+                // TVMazeType = new
+                // {
+                //     S = "$method.request.querystring.tvmazetype"
+                // }
             },
             TableName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))
         };
         var queryRequestTemplate = new Dictionary<string, object>{
             {"TableName",awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel))},
-            {"KeyConditionExpression","TVMazeType = :c"},
+            {"KeyConditionExpression","TVMazeIndex = :c"},
             {"ExpressionAttributeValues",new Dictionary<string,object>{
                 {":c",new Dictionary<string,object>{
-                    {"S","$method.request.querystring.tvmazetype"}
+                    {"S","$method.request.querystring.id"}
                 }}
             }}
         };

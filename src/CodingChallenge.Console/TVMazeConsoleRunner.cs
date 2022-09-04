@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CodingChallenge.Application.Exceptions;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using CommandLine;
 using Microsoft.Extensions.Logging;
 
@@ -11,6 +11,8 @@ namespace CodingChallenge.Console;
 
 public class TVMazeConsoleRunner
 {
+    public const int TotalNumberOfRecords = 2000;
+    public const int ItemPerMessage = 10;
     ILogger _logger;
     TVMazeScrapeCommandController _TVMazeRecordCommandHandler;
     public TVMazeConsoleRunner(ILogger logger, TVMazeScrapeCommandController handler)
@@ -47,12 +49,12 @@ public class TVMazeConsoleRunner
     {
         _logger.LogDebug($"file is being passed...");
         var lastId = 0;
-        for (int i = 1; i <= 200; i++)
+        for (int i = 1; i <= TotalNumberOfRecords; i++)
         {
-            if (i % 10 == 0)
+            if (i % ItemPerMessage == 0)
             {
-                _logger.LogInformation($"modules ok last id {lastId}, index {i}");
-                var response = await _TVMazeRecordCommandHandler.AddScrapeTaskAsync(new Application.NFT.Commands.Burn.AddScrapeTaskCommand((lastId+1),i,0));
+                _logger.LogInformation($"{i} - modules ok last id {lastId}, index ");
+                var response = await _TVMazeRecordCommandHandler.AddScrapeTaskAsync(new Application.TVMaze.Commands.Burn.AddScrapeTaskCommand((lastId+1),i,0));
                 lastId = i;
             }
         }

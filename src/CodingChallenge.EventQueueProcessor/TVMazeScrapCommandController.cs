@@ -1,6 +1,8 @@
-using CodingChallenge.Application.NFT.Base;
-using CodingChallenge.Application.NFT.Commands.Burn;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Base;
+using CodingChallenge.Application.TVMaze.Commands.Burn;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Queries;
+using CodingChallenge.Application.TVMaze.Queries.Token;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -42,8 +44,13 @@ public class TVMazeScrapeCommandController
         _logger.LogDebug($"scrape  command is called for token id {ScrapeCommand.index}");
         return await _mediator.Send<ScrapeCommandResponse>(ScrapeCommand);
     }
-     public async Task<AddScrapeTaskCommandResponse> AddScrapeTaskAsync(AddScrapeTaskCommand addScrapeTaskCommand)
+    public async Task<AddScrapeTaskCommandResponse> AddScrapeTaskAsync(AddScrapeTaskCommand addScrapeTaskCommand)
     {
         return await _mediator.Send<AddScrapeTaskCommandResponse>(addScrapeTaskCommand);
+    }
+    public async Task<TVMazeRecordDto> GetTokenByIdAsync(GetTVMazeItemByIndexQuery query)
+    {
+        _logger.LogDebug($"{query.Index} - token query is called for token id ");
+        return await _mediator.Send<TVMazeRecordDto>(query);
     }
 }

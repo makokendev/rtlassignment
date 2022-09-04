@@ -19,9 +19,10 @@ public class TVMazeRecordDataModelTVMazeRecordEntityResolver : IValueResolver<TV
 public class TVMazeRecordDataModel : AuditableEntity, IMapFrom<TVMazeRecordEntity>
 {
 
-    [DynamoDBRangeKey]
-    public string TVMazeIndex { get; set; }
+    //[DynamoDBRangeKey]
     [DynamoDBHashKey]
+    public string TVMazeIndex { get; set; }
+    [DynamoDBProperty]
     public string TVMazeType { get; set; }
     [DynamoDBProperty]
     public List<TVMazeCastItem> CastList { get; set; }

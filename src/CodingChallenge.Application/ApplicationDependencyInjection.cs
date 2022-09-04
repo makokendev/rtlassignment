@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using CodingChallenge.Application.Behaviours;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

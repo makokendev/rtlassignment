@@ -1,8 +1,8 @@
 using Amazon.Lambda.Core;
 using Amazon.Lambda.SQSEvents;
 using CodingChallenge.Application;
-using CodingChallenge.Application.NFT.Commands.Burn;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Commands.Burn;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using CodingChallenge.EventQueueProcessor.Logger;
 using CodingChallenge.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +19,7 @@ public class EventQueueLambdaClass
     public IServiceProvider serviceProvider;
     public AWSAppProject awsApplication;
 
+    public const int TryCountLimit = 20;
     public EventQueueLambdaClass()
     {
         LoadConfiguration();
@@ -77,7 +78,7 @@ public class EventQueueLambdaClass
                 var tasks = new List<Task>();
                 for (int i = startIndex; i <= endIndex; i++)
                 {
-                    logger.LogInformation($"sending scrape command for index {i}");
+                    logger.LogInformation($"{i} - sending scrape command for index {i}");
                     tasks.Add(runner.SendScrapeCommand(i));
                 }
                 await Task.WhenAll(tasks);
@@ -86,15 +87,43 @@ public class EventQueueLambdaClass
                 {
                     var result = ((Task<ScrapeCommandResponse>)task).Result;
                     results.Add(result);
-                    if (!result.IsSuccess && taskObject.TryCount < 6)
+                    logger.LogInformation($"{result.index} - asyncresponse received");
+                    if (result.IsSuccess && result.CastListEmpty == true)
                     {
-                        var newOrder = new AddScrapeTaskCommand(result.index,result.index,taskObject.TryCount+1);
-                         logger.LogInformation($"Adding a new task for a failed task. Id -> {result.index}.Try Count -> {taskObject.TryCount}");
-                        await runner.AddScrapeTaskAsync(newOrder);
+                        logger.LogInformation($"{result.index} - success call && cast list is empty. We won't try again");
+                        continue;
+                    }
+                    if (!result.IsSuccess && result.NotFound == true)
+                    {
+                        logger.LogInformation($"{result.index} - Item Not found. We won't try again");
+                        continue;
+                    }
+                    if (!result.IsSuccess)
+                    {
+                        logger.LogInformation($"{result.index} -- NOT SUCCESS. Will retry if already not in db or try count not exceeded.");
+                        if (taskObject.TryCount < TryCountLimit)
+                        {
+                            var indexResult = await runner.GetTokenByIdAsync(new Application.TVMaze.Queries.Token.GetTVMazeItemByIndexQuery(result.index.ToString()));
+                            if (indexResult == null)
+                            {
+                                logger.LogInformation($"{result.index} -- Item is not in database");
+                                var newOrder = new AddScrapeTaskCommand(result.index, result.index, taskObject.TryCount + 1);
+                                logger.LogInformation($"{result.index} - Try Count -> {taskObject.TryCount} - Adding a new task for a failed task. Id -> {result.index}.");
+                                await runner.AddScrapeTaskAsync(newOrder);
+                            }
+                            else
+                            {
+                                logger.LogInformation($"{result.index} -- Item already exists in database");
+                            }
+                        }else{
+                            logger.LogInformation($"{result.index} -- Try Count limit exceeded.");
+                        }
+                    }
+                    else
+                    {
+                        logger.LogInformation($"{result.index} -- Saved in DB!");
                     }
                 }
-                //await Task.FromResult("");
-
             }
 
             catch (Exception ex)

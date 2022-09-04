@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CodingChallenge.Application.NFT.Commands.Mint;
+using CodingChallenge.Application.TVMaze.Commands.Mint;
 using CodingChallenge.Domain.Entities.NFT;
 
 namespace CodingChallenge.Application.AutoMapper;

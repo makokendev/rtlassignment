@@ -2,11 +2,13 @@ using System.Collections.Generic;
 
 namespace CodingChallenge.Domain.Entities;
 // Root myDeserializedClass = JsonConvert.DeserializeObject<List<Root>>(myJsonResponse);
-public class TVMazeCastHttpCallResponse
+public class TVMazeCastDataResponse
 {
     public List<TVMazeCastItem> CastList { get; set; }
     public bool RateLimited { get; set; }
     public bool IsSuccessful { get; set; }
+    public bool AlreadyStored { get; set; }
+    public bool NotFound { get; set; }
 }
 
 public class Character
@@ -43,7 +45,7 @@ public class Person
     public string name { get; set; }
     public Country country { get; set; }
     public string birthday { get; set; }
-    public object deathday { get; set; }
+    public string deathday { get; set; }
     public string gender { get; set; }
     public Image image { get; set; }
     public int updated { get; set; }

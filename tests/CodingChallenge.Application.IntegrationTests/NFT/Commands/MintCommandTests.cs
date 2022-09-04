@@ -1,6 +1,6 @@
 ﻿// using System.Threading.Tasks;
 // using CodingChallenge.Application.Exceptions;
-// using CodingChallenge.Application.NFT.Commands.Mint;
+// using CodingChallenge.Application.TVMaze.Commands.Mint;
 // using Xunit;
 
 // namespace CodingChallenge.Application.IntegrationTests.NFT.Commands;
