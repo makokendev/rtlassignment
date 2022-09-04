@@ -142,7 +142,8 @@ public class TVMazeRecordDynamoDBRepository : ApplicationDynamoDBBase<TVMazeReco
             if (result.CastList == null || !result.CastList.Any())
             {
                 _logger.LogInformation($"{index} - cast list is empty");
-                return result;
+                result.CastList = new List<TVMazeCastItem>();
+                //return result;
             }
             var entity = new TVMazeRecordEntity()
             {

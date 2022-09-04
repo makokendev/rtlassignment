@@ -90,8 +90,8 @@ public class EventQueueLambdaClass
                     logger.LogInformation($"{result.index} - asyncresponse received");
                     if (result.IsSuccess && result.CastListEmpty == true)
                     {
-                        logger.LogInformation($"{result.index} - success call && cast list is empty. We won't try again");
-                        continue;
+                        logger.LogInformation($"{result.index} - success call && cast list is empty. Noted...");
+                        //continue;
                     }
                     if (!result.IsSuccess && result.NotFound == true)
                     {

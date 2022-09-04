@@ -21,7 +21,10 @@ public sealed class DatabaseStack : Stack
         string dynamoDBTableFullName = awsApplication.GetDynamodbTableName(typeof(TVMazeRecordDataModel));
         var dynamoDbTableProps = new TableProps()
         {
-            TableName = dynamoDBTableFullName
+            TableName = dynamoDBTableFullName,
+            BillingMode = BillingMode.PAY_PER_REQUEST
+
+
         };
         dynamoDbTableProps.PartitionKey = new Amazon.CDK.AWS.DynamoDB.Attribute()
         {
